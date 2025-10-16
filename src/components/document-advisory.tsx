@@ -19,7 +19,7 @@ export function DocumentAdvisory() {
       <Card className="gap-4">
         <CardHeader className="gap-0">
           <div className="flex items-center gap-2">
-            <Info className="h-5 w-5 text-primary" />
+            <Info className="h-5 w-5 text-emerald-600" />
             <CardTitle className="text-lg">{advisoryConfig.generalSpec.title}</CardTitle>
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed">{advisoryConfig.acknowledgeLabel}</p>
@@ -33,9 +33,9 @@ export function DocumentAdvisory() {
 
           {/* Supported formats */}
           <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-            <span className="inline-flex items-center gap-2 rounded-md border border-primary/20 bg-primary/5 px-2 py-1 text-foreground">
-              <FileText className="h-3.5 w-3.5 text-primary" />
-              <span className="font-medium text-foreground">Supported formats:</span>
+            <span className="inline-flex items-center gap-2 rounded-md border border-amber-200 bg-amber-50 px-2 py-1 text-amber-800 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-100">
+              <FileText className="h-3.5 w-3.5 text-amber-600 dark:text-amber-200" />
+              <span className="font-medium">Supported formats:</span>
               <span>{advisoryConfig.supportedFormats.join(", ")}</span>
             </span>
             <span className="inline-flex items-center gap-2 rounded-md border border-sky-200/70 bg-sky-50 px-2 py-1 text-foreground dark:border-sky-400/40 dark:bg-sky-500/10">
@@ -50,7 +50,7 @@ export function DocumentAdvisory() {
       <Card className="gap-4">
         <CardHeader className="gap-0">
           <div className="flex items-center gap-2">
-            <ListCheck className="h-5 w-5 text-primary" />
+            <ListCheck className="h-5 w-5 text-sky-600" />
             <CardTitle className="text-lg">{advisoryConfig.groups[0].title}</CardTitle>
           </div>
           <p className="text-sm text-muted-foreground">
@@ -58,7 +58,7 @@ export function DocumentAdvisory() {
           </p>
         </CardHeader>
         <CardContent>
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion type="multiple" className="w-full">
             {advisoryConfig.groups.map((group) =>
               group.items.map((it) => (
                 <AccordionItem key={it.id} value={it.id}>

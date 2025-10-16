@@ -11,8 +11,9 @@ import {
   getPrevId,
   getNextId,
   parseMulti,
+  resetFollowingSteps,
 } from "@/config/wizard-config";
-import type { WizardStep } from "@/config/wizard-config";
+import type { STEPS_IN_ORDER, WizardStep } from "@/config/wizard-config";
 
 function getDisplayStepIndex(_formData: Record<string, string>, currentId: string): number {
   if (currentId === "purpose") return 0;
@@ -31,9 +32,11 @@ export function DocumentChecker() {
   const totalSteps = 5;
 
   const handleNext = (data: Record<string, string>) => {
+    const key = Object.keys(data)[0];
     const updated = { ...formData, ...data };
-    setFormData(updated);
-    const next = getNextId(updated, currentId);
+    const cleaned = key ? resetFollowingSteps(updated, key as (typeof STEPS_IN_ORDER)[number]) : updated;
+    setFormData(cleaned);
+    const next = getNextId(cleaned, currentId);
     if (next === "results") {
       setShowResults(true);
       return;
@@ -67,7 +70,23 @@ export function DocumentChecker() {
   };
 
   if (showResults) {
-    return <ResultsDisplay formData={formData} onReset={handleReset} onBack={handleResultsBack} />;
+    const finalIndicator = <StepIndicator currentIndex={totalSteps - 1} total={totalSteps} />;
+    return (
+      <div className="mx-auto max-w-4xl space-y-8">
+        <div className="text-center space-y-3">
+          <h2 className="text-3xl font-bold tracking-tight">Aadhaar Document Requirement Checker</h2>
+          <p className="text-muted-foreground text-lg leading-snug text-balance">
+            Review your tailored Aadhaar document checklist and download a copy for your visit.
+          </p>
+        </div>
+        <ResultsDisplay
+          formData={formData}
+          onReset={handleReset}
+          onBack={handleResultsBack}
+          stepIndicator={finalIndicator}
+        />
+      </div>
+    );
   }
 
   const step: WizardStep = wizardConfig.steps[currentId];
