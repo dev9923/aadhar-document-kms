@@ -1,28 +1,8 @@
 // src/config/wizard-config.ts
-export type WizardStepType = "select" | "checkbox";
-
-export interface WizardOption {
-  value: string;
-  label: string;
-  description?: string;
-}
-
-export interface WizardStep {
-  id: string;
-  title: string;
-  placeholder?: string;
-  type: WizardStepType;
-  options: WizardOption[];
-  /** Decide next step id ("results" finishes the wizard) */
-  next?: (formData: Record<string, string>) => string | null;
-}
-
-export interface WizardConfig {
-  steps: Record<string, WizardStep>;
-  firstStep: string;
-}
+import type { WizardConfig, WizardStep } from "@/config/wizard-types";
 
 export const STEPS_IN_ORDER = ["purpose", "ageGroup", "category", "enrolmentType", "availableDocuments", "updateDocuments"] as const;
+export type WizardStepOrder = typeof STEPS_IN_ORDER;
 
 /* -----------------------------
  * Step-by-step configuration
@@ -93,8 +73,14 @@ export const wizardConfig: WizardConfig = {
       type: "select",
       options: [
         { value: "hof", label: "Head of Family (HoF)–Based Enrolment" },
-        { value: "doc", label: "Document-Based Enrolment (CCI/DCPO/Standard Certificate)" },
-        { value: "foreign", label: "Foreign National Enrolment (OCI/Nepal/Bhutan/LTV/Other)" },
+        {
+          value: "doc",
+          label: "Document-Based Enrolment (CCI/DCPO/Standard Certificate)",
+        },
+        {
+          value: "foreign",
+          label: "Foreign National Enrolment (OCI/Nepal/Bhutan/LTV/Other)",
+        },
       ],
       next: () => "results",
     },
@@ -108,41 +94,144 @@ export const wizardConfig: WizardConfig = {
       // Names reflect List III items & generic PoI/PoA/PoR/PDB buckets
       options: [
         { value: "passport", label: "Valid Indian Passport" },
-        { value: "ration", label: "Ration / PDS Photograph Card / e-Ration Card" },
-        { value: "voter", label: "Voter Identity Card / e-Voter Identity Card" },
-        { value: "dl", label: "Driving Licence" },
-        { value: "serviceId", label: "Service Photo Identity Card (Govt/PSU/Regulatory/Statutory)" },
-        { value: "pensionId", label: "Pensioner / Freedom Fighter Photo ID / Pension Payment Order" },
-        { value: "healthScheme", label: "CGHS / ECHS / ESIC / Medi-Claim Card" },
-        { value: "disabilityId", label: "Disability Identity Card / Certificate of Disability" },
-        { value: "mgnregaDomicile", label: "MGNREGA/NREGS Job Card or Domicile Certificate" },
-        { value: "casteCertificate", label: "ST/SC/OBC Certificate (Central/State)" },
-        { value: "marksheet", label: "Mark-sheet / Certificate (Board/University/Higher Ed.)" },
-        { value: "transgenderId", label: "Transgender Identity Card / Certificate" },
-        { value: "uidaiCert_MPMLA", label: "UIDAI Std. Certificate – MP/MLA/MLC/Municipal Councillor" },
-        { value: "uidaiCert_GazA_EPFO", label: "UIDAI Std. Certificate – Gazetted Officer Group A / EPFO Officer" },
-        { value: "uidaiCert_Tehsildar_GazB", label: "UIDAI Std. Certificate – Tehsildar / Gazetted Officer Group B" },
-        { value: "uidaiCert_NACO_Health", label: "UIDAI Std. Certificate – NACO/State Health/State AIDS Project" },
-        { value: "uidaiCert_EdInstitution", label: "UIDAI Std. Certificate – Recognised Educational Institution" },
-        { value: "uidaiCert_VillageAuth", label: "UIDAI Std. Certificate – Village Panchayat/Revenue Officer (Rural)" },
-        { value: "electricityBill", label: "Electricity Bill (≤3 months)" },
-        { value: "waterBill", label: "Water Bill (≤3 months)" },
-        { value: "telecomBill", label: "Telephone/Post-paid Mobile/Broadband Bill (≤3 months)" },
-        { value: "propertyDocs", label: "Registered Sale/Gift Deed or Rent/Lease/Leave & Licence Agreement" },
-        { value: "gasBill", label: "Gas Bill (≤3 months)" },
-        { value: "allotmentLetter", label: "Allotment Letter of Accommodation (Govt/PSU etc., ≤1 year)" },
-        { value: "insurancePolicy", label: "Life/Medical Insurance Policy (valid ≤1 year from issue)" },
-        { value: "birthCert", label: "Birth Certificate" },
-        { value: "prisonerInduction", label: "Prisoner Induction Document (PID)" },
-        { value: "legalGuardianship", label: "Legal Guardianship Document (GWA/NT Act/RPwD Act)" },
+        {
+          value: "ration",
+          label: "Ration / PDS Photograph Card / e-Ration Card",
+        },
+        {
+          value: "voter",
+          label: "Voter Identity Card / e-Voter Identity Card whose details are displayed online on the website of the Election Commission of India or the Chief Electoral Officer concerned",
+        },
+        { value: "dl", label: "Driving licence" },
+        {
+          value: "serviceId",
+          label: "Service Photo Identity Card issued by Central Government/ State Government/ PSU/ regulatory body / statutory body",
+        },
+        {
+          value: "pensionId",
+          label: "Pensioner Photo Identity Card / Freedom Fighter Photo Identity Card / Pension Payment Order issued by Central Government/ State Government/ PSU / regulatory body / statutory body",
+        },
+        {
+          value: "healthScheme",
+          label: "CGHS/ ECHS/ ESIC/ Medi-Claim Card issued by Central Government/ State Government/ PSU",
+        },
+        {
+          value: "disabilityId",
+          label: "Disability Identity Card / Certificate of Disability issued under Rights of Persons with Disabilities Rules, 2017",
+        },
+        {
+          value: "mgnregaDomicile",
+          label: "MGNREGA/NREGS Job Card and Domicile Certificate issued by State Government",
+        },
+        {
+          value: "domicileCertificate",
+          label: "Domicile Certificate issued by State Government",
+        },
+        {
+          value: "casteCertificate",
+          label: "Scheduled Tribe (ST)/ Scheduled Caste (SC)/ Other Backward Caste (OBC) Certificate issued by Central Government/ State Government",
+        },
+        {
+          value: "marksheet",
+          label: "Mark-sheet/Certificate issued by recognised Board of Education or university or deemed university or higher educational institution established by a Central or State Act",
+        },
+        {
+          value: "transgenderId",
+          label: "Third gender / Transgender Identity Card / Certificate issued under the Transgender Persons (Protection of Rights) Act, 2019 and rules made thereunder",
+        },
+        {
+          value: "uidaiCert_MPMLA",
+          label: "Certificate issued on UIDAI Standard Certificate format by MP/ MLA/ MLC/ Municipal Councillor",
+        },
+        {
+          value: "uidaiCert_GazA_EPFO",
+          label: "Certificate issued on UIDAI Standard Certificate format by Gazetted Officer Group 'A'/Employees Provident Fund Organisation (EPFO) Officer",
+        },
+        {
+          value: "uidaiCert_Tehsildar_GazB",
+          label: "Certificate issued on UIDAI Standard Certificate format by Tehsildar/ Gazetted Officer Group 'B'",
+        },
+        {
+          value: "uidaiCert_NACO_Health",
+          label: "Certificate issued on UIDAI Standard Certificate format by Gazetted Officer at National AIDS Control Organisation (NACO) / State Health Department / Project Director of the State AIDS Control Society or his nominee",
+        },
+        {
+          value: "uidaiCert_EdInstitution",
+          label: "Certificate issued on UIDAI Standard Certificate format by recognised educational institution (signed by Head of Institute; only for the institute students concerned)",
+        },
+        {
+          value: "uidaiCert_VillageAuth",
+          label:
+            "Certificate issued on UIDAI Standard Certificate format by Village Panchayat Head/ President or Mukhiya/ Gaon Bura/ equivalent authority (for rural areas)/ Village Panchayat Secretary/ Village Revenue Officer or equivalent (for rural areas)",
+        },
+        {
+          value: "electricityBill",
+          label: "Electricity bill (pre-paid/post-paid bill, not older than 3 months)",
+        },
+        { value: "waterBill", label: "Water bill (not older than 3 months)" },
+        {
+          value: "telecomBill",
+          label: "Telephone landline bill/ post-paid mobile bill/ broadband bill (not older than 3 months)",
+        },
+        {
+          value: "propertyDocs",
+          label: "Valid sale agreement/ gift deed registered with the Registrar Office, or registered or unregistered rent, lease agreement or leave and licence agreement",
+        },
+        {
+          value: "gasBill",
+          label: "Gas bill (not older than 3 months)",
+        },
+        {
+          value: "allotmentLetter",
+          label: "Allotment letter of accommodation issued by Central Government/ State Government/ PSU / regulatory body / statutory body (not older than 1 year)",
+        },
+        {
+          value: "insurancePolicy",
+          label: "Life or medical insurance policy (valid up to 1 year from the date of issue of the Policy)",
+        },
+        {
+          value: "birthCert",
+          label: "Birth certificate issued under the Registration of Births and Deaths Act, 1969 and the rules made thereunder",
+        },
+        {
+          value: "prisonerInduction",
+          label: "Prisoner Induction Document (PID) issued by Prison Officer with signature and seal",
+        },
+        {
+          value: "legalGuardianship",
+          label:
+            "Document to prove legal guardianship issued by the Central government or a State Government authority or a court of law under the relevant Acts (the Guardians and Wards Act, 1890 / the National Trust Act, 1999 / the Rights of Persons with Disabilities Act, 2016) and the rules made under these Acts",
+        },
         // Foreign/OCI/Nepal/Bhutan/LTV
-        { value: "ociPassport", label: "OCI: Valid Foreign Passport + OCI Card" },
-        { value: "nepalBhutanPassport", label: "Nepal/Bhutan: Passport" },
-        { value: "nepalBhutanAltPair", label: "Nepal/Bhutan: Any two – Citizenship / Voter ID / Limited Photo ID Cert." },
-        { value: "ltv", label: "Long Term Visa (LTV) – Minority Communities" },
-        { value: "foreignPassportVisa", label: "Other Foreign Nationals: Valid Foreign Passport + Visa" },
-        { value: "frroPermit", label: "FRRO/FRO Registration Certificate or Residential Permit" },
-
+        {
+          value: "ociPassport",
+          label: "For OCI cardholders - Valid foreign passport (along with OCI card)",
+        },
+        {
+          value: "nepalBhutanPassport",
+          label: "For nationals of Nepal and Bhutan – Passport of Nepal/Bhutan",
+        },
+        {
+          value: "nepalBhutanCitizenship",
+          label: "For nationals of Nepal and Bhutan – Valid Nepalese/ Bhutanese Citizenship Certificate (acceptable as proof of date of birth also)",
+        },
+        {
+          value: "nepalBhutanVoterOrLimitedID",
+          label:
+            "For nationals of Nepal and Bhutan – Valid Voter Identity Card issued by the Election Commission of Nepal/ Bhutan or Limited validity Photo Identity Certificate issued by Nepalese Mission/ Royal Bhutanese Mission in India (not acceptable as proof of date of birth)",
+        },
+        {
+          value: "ltv",
+          label: "For Long Term Visa holders - Valid Long Term Visa (LTV), issued to minority communities of Afghanistan, Bangladesh and Pakistan (Hindus, Sikhs, Buddhists, Jains, Parsis and Christians)",
+        },
+        {
+          value: "foreignPassportVisa",
+          label: "For other foreign nationals - Valid foreign passport (along with valid visa)",
+        },
+        {
+          value: "frroPermit",
+          label: "Valid Registration Certificate or Residential permit issued by FRRO/FRO to the foreign national (except OCI cardholders, LTV document holders and Nepal/Bhutan nationals)",
+        },
         // Generic buckets (kept last for flexibility)
         { value: "poi", label: "Generic PoI" },
         { value: "poa", label: "Generic PoA" },
@@ -224,20 +313,107 @@ export function resetFollowingSteps(formData: Record<string, string>, anchorId: 
  */
 
 // List I (0–5) enrolment specifics
-export const LIST_I = {
-  hof_based: ["Birth certificate issued under the Registration of Births and Deaths Act, 1969", "Valid Indian Passport (only applicable for NRIs)", "Legal guardianship document (GWA 1890 / National Trust 1999 / RPwD 2016)"],
-  document_based: ["UIDAI Standard Certificate by DCPO with CCI placement order (Form 18 of JJ Model Rules, 2016, amended 2022)"],
-  foreign: [
-    "OCI cardholders: Valid foreign passport + OCI card",
-    "Nepal/Bhutan: Passport OR Citizenship Certificate + Limited validity Photo Identity Certificate",
-    "LTV holders: Valid Long Term Visa (minority communities of AFG/BGD/PAK)",
-    "Other foreign nationals: Valid foreign passport + valid visa",
+export type ListIHofEntry = {
+  document: string;
+  por: boolean;
+  pdb: boolean;
+  note?: string;
+  docId?: string;
+};
+
+export type ListIDocumentEntry = {
+  document: string;
+  poi: boolean;
+  poa: boolean;
+  pdb: boolean;
+  note?: string;
+  docId?: string;
+};
+
+export type ListIForeignEntry = {
+  category: string;
+  documents: string;
+  poi: boolean;
+  poa: boolean;
+  pdb: boolean;
+  note?: string;
+};
+
+export type ListIConfig = {
+  hofBased: readonly ListIHofEntry[];
+  documentBased: readonly ListIDocumentEntry[];
+  foreign: readonly ListIForeignEntry[];
+};
+
+export const LIST_I: ListIConfig = {
+  hofBased: [
+    {
+      document: "Birth certificate issued under the Registration of Births and Deaths Act, 1969 and the rules made thereunder",
+      por: true,
+      pdb: true,
+      note: "Mandatory for births on/after 1.10.2023; must clearly mention the child's name and the HoF/legal guardian.",
+      docId: "birth-certificate",
+    },
+    {
+      document: "Valid Indian Passport (only applicable for NRIs)",
+      por: true,
+      pdb: true,
+      note: "Use only when the child holds an Indian passport; ensure HoF/parent details are captured. Applicable for NRI enrolments.",
+      docId: "indian-passport",
+    },
+    {
+      document: "Document to prove legal guardianship issued by the Central/State Government authority or a court under the Guardians and Wards Act, 1890 / National Trust Act, 1999 / Rights of Persons with Disabilities Act, 2016",
+      por: true,
+      pdb: false,
+      note: "Accepted for establishing Proof of Relationship with the legal guardian. Submit a separate PDB document for the child.",
+    },
   ],
-} as const;
+  documentBased: [
+    {
+      document:
+        "Certificate issued on UIDAI Standard Certificate format by District Child Protection Officer (DCPO) along with the order of placement of child in a Child Care Institution (CCI) in Form 18 of the Juvenile Justice Model Rules, 2016 (as amended in 2022)",
+      poi: true,
+      poa: true,
+      pdb: false,
+      note: "Applicable only for children placed in CCI. Proof of Date of Birth must be supported through another acceptable PDB document.",
+    },
+  ],
+  foreign: [
+    {
+      category: "OCI cardholders",
+      documents: "Valid foreign passport along with OCI card",
+      poi: true,
+      poa: false,
+      pdb: true,
+      note: "Validity: 10 years. Provide separate PoA/PDB documents as per List III requirements.",
+    },
+    {
+      category: "Nationals of Nepal and Bhutan",
+      documents: "Passport of Nepal/Bhutan OR valid Nepalese/Bhutanese Citizenship Certificate along with Limited validity Photo Identity Certificate issued by the respective Mission in India",
+      poi: true,
+      poa: false,
+      pdb: true,
+      note: "Validity: 10 years. Proof of Address/Date of Birth must be submitted using acceptable documents from List III.",
+    },
+    {
+      category: "Long Term Visa (LTV) holders",
+      documents: "Valid Long Term Visa issued to minority communities of Afghanistan, Bangladesh and Pakistan (Hindus, Sikhs, Buddhists, Jains, Parsis and Christians)",
+      poi: true,
+      poa: false,
+      pdb: true,
+      note: "Validity: till the validity of the LTV. Furnish PoA/PDB as per List III in addition to the LTV document.",
+    },
+    {
+      category: "Other foreign nationals",
+      documents: "Valid foreign passport along with valid visa",
+      poi: true,
+      poa: false,
+      pdb: true,
+      note: "Validity: till the validity of the visa. Supporting PoA/PDB documents must be chosen from List III.",
+    },
+  ],
+};
 
-// List II (5–18) – We render via matrix using LIST_III style PoI/PoA/PDB for simplicity.
-
-// List III (18+) – we build the matrix below.
 export type MatrixEntry = {
   label: string;
   poi?: boolean;
@@ -245,138 +421,286 @@ export type MatrixEntry = {
   por?: boolean;
   pdb?: boolean;
   note?: string;
+  docId?: string;
 };
 
-// Strict labels exactly as per List III rows.
-export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
-  passport: { label: "Valid Indian Passport", poi: true, poa: true, pdb: true },
-  ration: { label: "Ration / PDS Photograph Card / e-Ration Card", poi: true },
-  voter: {
-    label: "Voter Identity Card / e-Voter Identity Card (details online on ECI/CEO website)",
-    poi: true,
-    poa: true,
-  },
-  dl: { label: "Driving Licence", poi: true, poa: true },
-  serviceId: {
-    label: "Service Photo Identity Card issued by Central/State Government/PSU/regulatory/statutory body",
-    poi: true,
-  },
-  pensionId: {
-    label: "Pensioner / Freedom Fighter Photo Identity Card / Pension Payment Order (Central/State/PSU/regulatory/statutory)",
-    poi: true,
-  },
-  healthScheme: {
-    label: "CGHS / ECHS / ESIC / Medi-Claim Card (Central/State/PSU)",
-    poi: true,
-    poa: true,
-  },
-  disabilityId: {
-    label: "Disability Identity Card / Certificate of Disability (RPwD Rules, 2017)",
-    poi: true,
-    pdb: true,
-  },
-  mgnregaDomicile: {
-    label: "MGNREGA/NREGS Job Card and Domicile Certificate (State Govt.)",
-    poi: true,
-  },
-  casteCertificate: {
-    label: "ST/SC/OBC Certificate (Central/State Government)",
-    poi: true,
-  },
-  marksheet: {
-    label: "Mark-sheet/Certificate (recognised Board/University/Higher educational institution)",
-    pdb: true,
-  },
-  transgenderId: {
-    label: "Third gender / Transgender Identity Card / Certificate (TPPR Act, 2019)",
-    poi: true,
-  },
-  uidaiCert_MPMLA: {
-    label: "UIDAI Standard Certificate – MP/MLA/MLC/Municipal Councillor",
-    poi: true,
-    poa: true,
-  },
-  uidaiCert_GazA_EPFO: {
-    label: "UIDAI Standard Certificate – Gazetted Officer Group ‘A’ / EPFO Officer",
-    poi: true,
-    poa: true,
-  },
-  uidaiCert_Tehsildar_GazB: {
-    label: "UIDAI Standard Certificate – Tehsildar / Gazetted Officer Group ‘B’",
-    poi: true,
-    poa: true,
-  },
-  uidaiCert_NACO_Health: {
-    label: "UIDAI Standard Certificate – NACO / State Health Dept / State AIDS Control Society Project Director/nominee",
-    poi: true,
-  },
-  uidaiCert_EdInstitution: {
-    label: "UIDAI Standard Certificate – Recognised educational institution (signed by Head; only for institute students concerned)",
-    poi: true,
-    poa: true,
-  },
-  uidaiCert_VillageAuth: {
-    label: "UIDAI Standard Certificate – Village Panchayat Head/President/Mukhiya/Gaon Bura/equivalent; Panchayat Secretary/Revenue Officer (rural)",
-    poi: true,
-    poa: true,
-  },
-  electricityBill: { label: "Electricity bill (pre/post-paid, ≤3 months)", poa: true },
-  waterBill: { label: "Water bill (≤3 months)", poa: true },
-  telecomBill: {
-    label: "Telephone landline / post-paid mobile / broadband bill (≤3 months)",
-    poa: true,
-  },
-  propertyDocs: {
-    label: "Valid sale agreement / gift deed (registered) OR rent/lease/leave & licence agreement (registered or unregistered)",
-    poa: true,
-  },
-  gasBill: { label: "Gas bill (≤3 months)", poa: true },
-  allotmentLetter: {
-    label: "Allotment letter of accommodation (Central/State Govt/PSU/regulatory/statutory; ≤1 year)",
-    poa: true,
-  },
-  insurancePolicy: {
-    label: "Life or medical insurance policy (valid up to 1 year from date of issue)",
-    poa: true,
-  },
+export const LIST_II_MATRIX: Record<string, MatrixEntry> = {
   birthCert: {
-    label: "Birth certificate (Registration of Births & Deaths Act, 1969)",
+    label: "Birth certificate issued under the Registration of Births and Deaths Act, 1969 and the rules made thereunder",
+    por: true,
     pdb: true,
+    docId: "birth-certificate",
   },
-  prisonerInduction: {
-    label: "Prisoner Induction Document (PID) with signature and seal",
+  passport: {
+    label: "Valid Indian Passport",
     poi: true,
+    poa: true,
+    por: true,
+    pdb: true,
+    docId: "indian-passport",
   },
-  legalGuardianship: {
-    label: "Legal guardianship document (GWA 1890 / National Trust 1999 / RPwD 2016)",
+  domicileCertificate: {
+    label: "Domicile Certificate issued by State Government",
     poi: true,
     poa: true,
     por: true,
   },
-  // Foreign/OCI/Nepal/Bhutan/LTV
-  ociPassport: {
-    label: "OCI cardholders – Valid foreign passport (+ OCI card)",
+  casteCertificate: {
+    label: "Scheduled Tribe (ST) / Scheduled Caste (SC) / Other Backward Caste (OBC) Certificate issued by Central Government / State Government",
     poi: true,
     poa: true,
+    por: true,
+    docId: "caste-certificate",
+  },
+  disabilityId: {
+    label: "Disability Identity Card / Certificate of Disability issued under Rights of Persons with Disabilities Rules, 2017",
+    poi: true,
+    poa: true,
+  },
+  legalGuardianship: {
+    label:
+      "Document to prove legal guardianship issued by the Central government or a State Government authority or a court of law under the relevant Acts (the Guardians and Wards Act, 1890 / the National Trust Act, 1999 / the Rights of Persons with Disabilities Act, 2016) and the rules made under these Acts",
+    por: true,
+  },
+  dcpoCertificate: {
+    label:
+      "Certificate issued on UIDAI Standard Certificate format by District Child Protection Officer (DCPO) along with order of placement of child in Child Care Institution (CCI) in Form 18 of the Juvenile Justice Model Rules, 2016 (as amended in 2022)",
+    poi: true,
+    poa: true,
+  },
+  transgenderId: {
+    label: "Third gender / Transgender Identity Card / Certificate issued under the Transgender Persons (Protection of Rights) Act, 2019 and rules made thereunder",
+    poi: true,
+    poa: true,
+    por: true,
+    pdb: true,
+  },
+  ociPassport: {
+    label: "For Overseas Citizen of India (OCI) cardholders - Valid foreign passport (along with OCI card)",
+    poi: true,
+    pdb: true,
+    note: "Validity: 10 years. Provide Proof of Address and Proof of Date of Birth documents from List III.",
   },
   nepalBhutanPassport: {
-    label: "Nepal/Bhutan – Passport",
+    label: "For nationals of Nepal and Bhutan – Passport of Nepal/Bhutan",
     poi: true,
-    poa: true,
+    pdb: true,
+    note: "Validity: 10 years. Provide Proof of Address and Proof of Date of Birth documents from List III.",
   },
-  nepalBhutanAltPair: {
-    label: "Nepal/Bhutan – Any two: Citizenship Certificate / Voter ID / Limited Photo ID Certificate (same address)",
-    poa: true,
+  nepalBhutanCitizenship: {
+    label: "For nationals of Nepal and Bhutan – Valid Nepalese/ Bhutanese Citizenship Certificate (along with Limited validity Photo Identity Certificate issued by Nepalese Mission/ Royal Bhutanese Mission in India)",
+    poi: true,
+    pdb: true,
+    note: "Validity: 10 years. Provide Proof of Address and Proof of Date of Birth documents from List III.",
   },
-  ltv: { label: "Long Term Visa (LTV) – Minority Communities", poi: true },
+  ltv: {
+    label: "For Long Term Visa holders - Valid Long Term Visa (LTV) document, issued to minority communities of Afghanistan, Bangladesh and Pakistan (Hindus, Sikhs, Buddhists, Jains, Parsis and Christians)",
+    poi: true,
+    pdb: true,
+    note: "Validity: till the validity of the Long Term Visa. Provide Proof of Address and Proof of Date of Birth documents from List III.",
+  },
   foreignPassportVisa: {
-    label: "Other foreign nationals – Valid foreign passport (+ valid visa)",
+    label: "For other foreign nationals - Valid foreign passport (along with valid visa)",
+    poi: true,
+    pdb: true,
+    note: "Validity: till the validity of the visa. Provide Proof of Address and Proof of Date of Birth documents from List III.",
+  },
+};
+
+// List III (18+) – we build the matrix below.
+// Strict labels exactly as per List III rows.
+export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
+  passport: {
+    label: "Valid Indian Passport",
     poi: true,
     poa: true,
+    pdb: true,
+    docId: "indian-passport",
+  },
+  ration: {
+    label: "Ration / PDS Photograph Card / e-Ration Card",
+    poi: true,
+    poa: true,
+    docId: "ration-card",
+  },
+  voter: {
+    label: "Voter Identity Card / e-Voter Identity Card whose details are displayed online on the website of the Election Commission of India or the Chief Electoral Officer concerned",
+    poi: true,
+    poa: true,
+    docId: "voter-id",
+  },
+  dl: {
+    label: "Driving licence",
+    poi: true,
+    docId: "driving-licence",
+  },
+  serviceId: {
+    label: "Service Photo Identity Card issued by Central Government/ State Government/ PSU/ regulatory body / statutory body",
+    poi: true,
+    poa: true,
+    pdb: true,
+    docId: "service-photo-id",
+  },
+  pensionId: {
+    label: "Pensioner Photo Identity Card / Freedom Fighter Photo Identity Card / Pension Payment Order issued by Central Government/ State Government/ PSU / regulatory body / statutory body",
+    poi: true,
+    poa: true,
+    pdb: true,
+    docId: "pensioner-photo-id",
+  },
+  healthScheme: {
+    label: "CGHS/ ECHS/ ESIC/ Medi-Claim Card issued by Central Government/ State Government/ PSU",
+    poi: true,
+  },
+  disabilityId: {
+    label: "Disability Identity Card / Certificate of Disability issued under Rights of Persons with Disabilities Rules, 2017",
+    poi: true,
+    poa: true,
+  },
+  mgnregaDomicile: {
+    label: "MGNREGA/NREGS Job Card and Domicile Certificate issued by State Government",
+    poi: true,
+    poa: true,
+  },
+  casteCertificate: {
+    label: "Scheduled Tribe (ST)/ Scheduled Caste (SC)/ Other Backward Caste (OBC) Certificate issued by Central Government/ State Government",
+    poi: true,
+    poa: true,
+  },
+  marksheet: {
+    label: "Mark-sheet/Certificate issued by recognised Board of Education or university or deemed university or higher educational institution established by a Central or State Act",
+    poi: true,
+    pdb: true,
+    docId: "marksheet-certificate",
+  },
+  transgenderId: {
+    label: "Third gender / Transgender Identity Card / Certificate issued under the Transgender Persons (Protection of Rights) Act, 2019 and rules made thereunder",
+    poi: true,
+    poa: true,
+    pdb: true,
+  },
+  uidaiCert_MPMLA: {
+    label: "Certificate issued on UIDAI Standard Certificate format by MP/ MLA/ MLC/ Municipal Councillor",
+    poa: true,
+    docId: "std-mpmla",
+  },
+  uidaiCert_GazA_EPFO: {
+    label: "Certificate issued on UIDAI Standard Certificate format by Gazetted Officer Group 'A'/Employees Provident Fund Organisation (EPFO) Officer",
+    poa: true,
+    docId: "std-gaz-a-epfo",
+  },
+  uidaiCert_Tehsildar_GazB: {
+    label: "Certificate issued on UIDAI Standard Certificate format by Tehsildar/ Gazetted Officer Group 'B'",
+    poa: true,
+    docId: "std-tehsildar-gaz-b",
+  },
+  uidaiCert_NACO_Health: {
+    label:
+      "Certificate issued on UIDAI Standard Certificate format by Gazetted Officer at National AIDS Control Organisation (NACO) / State Health Department / Project Director of the State AIDS Control Society or his nominee (in pursuance of Hon'ble Supreme Court Judgment in Criminal Appeal No(s). 135/2010 dated 19.5.2022)",
+    poi: true,
+    poa: true,
+    docId: "std-naco",
+  },
+  uidaiCert_EdInstitution: {
+    label: "Certificate issued on UIDAI Standard Certificate format by recognised educational institution (signed by the Head of Institute, only for the institute students concerned)",
+    poa: true,
+    docId: "std-edu-institution",
+  },
+  uidaiCert_VillageAuth: {
+    label:
+      "Certificate issued on UIDAI Standard Certificate format by Village Panchayat Head/ President or Mukhiya/ Gaon Bura/ equivalent authority (for rural areas)/ Village Panchayat Secretary/ Village Revenue Officer or equivalent (for rural areas)",
+    poa: true,
+  },
+  electricityBill: {
+    label: "Electricity bill (pre-paid/post-paid bill, not older than 3 months)",
+    poa: true,
+    docId: "electricity-bill",
+  },
+  waterBill: {
+    label: "Water bill (not older than 3 months)",
+    poa: true,
+    docId: "water-bill",
+  },
+  telecomBill: {
+    label: "Telephone landline bill/ post-paid mobile bill/ broadband bill (not older than 3 months)",
+    poa: true,
+    docId: "telephone-bill",
+  },
+  propertyDocs: {
+    label: "Valid sale agreement/ gift deed registered with the Registrar Office, or registered or unregistered rent, lease agreement or leave and licence agreement",
+    poa: true,
+    docId: "property-agreement",
+  },
+  gasBill: {
+    label: "Gas bill (not older than 3 months)",
+    poa: true,
+    docId: "gas-bill",
+  },
+  allotmentLetter: {
+    label: "Allotment letter of accommodation issued by Central Government/ State Government/ PSU / regulatory body / statutory body (not older than 1 year)",
+    poa: true,
+    docId: "allotment-letter",
+  },
+  insurancePolicy: {
+    label: "Life or medical insurance policy (valid up to 1 year from the date of issue of the Policy)",
+    poa: true,
+    docId: "insurance-policy",
+  },
+  birthCert: {
+    label: "Birth certificate issued under the Registration of Births and Deaths Act, 1969 and the rules made thereunder",
+    pdb: true,
+    docId: "birth-certificate",
+  },
+  prisonerInduction: {
+    label: "Prisoner Induction Document (PID) issued by Prison Officer with signature and seal",
+    poi: true,
+    poa: true,
+  },
+  legalGuardianship: {
+    label:
+      "Document to prove legal guardianship issued by the Central government or a State Government authority or a court of law under the relevant Acts (the Guardians and Wards Act, 1890 / the National Trust Act, 1999 / the Rights of Persons with Disabilities Act, 2016) and the rules made under these Acts",
+    por: true,
+  },
+  // Foreign/OCI/Nepal/Bhutan/LTV
+  ociPassport: {
+    label: "For Overseas Citizen of India (OCI) cardholders - Valid foreign passport (along with OCI card)",
+    poi: true,
+    pdb: true,
+    note: "Validity: 10 years. Provide Proof of Address and Proof of Date of Birth documents from List III.",
+  },
+  nepalBhutanPassport: {
+    label: "For nationals of Nepal and Bhutan – Passport of Nepal/Bhutan",
+    poi: true,
+    pdb: true,
+    note: "Validity: 10 years. Provide Proof of Address and Proof of Date of Birth documents from List III.",
+  },
+  nepalBhutanCitizenship: {
+    label: "For nationals of Nepal and Bhutan – Valid Nepalese/ Bhutanese Citizenship Certificate (acceptable as proof of date of birth also)",
+    poi: true,
+    pdb: true,
+    note: "Submit along with another Nepal/Bhutan-issued document carrying the same address, as specified by UIDAI.",
+  },
+  nepalBhutanVoterOrLimitedID: {
+    label:
+      "For nationals of Nepal and Bhutan – Valid Voter Identity Card issued by the Election Commission of Nepal/ Bhutan or Limited validity Photo Identity Certificate issued by Nepalese Mission/ Royal Bhutanese Mission in India (not acceptable as proof of date of birth)",
+    poi: true,
+    pdb: true,
+    note: "Provide any two documents with matching address details; Proof of Date of Birth must be furnished separately.",
+  },
+  ltv: {
+    label: "For Long Term Visa holders - Valid Long Term Visa (LTV) document, issued to minority communities of Afghanistan, Bangladesh and Pakistan (Hindus, Sikhs, Buddhists, Jains, Parsis and Christians)",
+    poi: true,
+    pdb: true,
+    note: "Validity: till the validity of the Long Term Visa. Provide Proof of Address and Proof of Date of Birth documents from List III.",
+  },
+  foreignPassportVisa: {
+    label: "For other foreign nationals - Valid foreign passport (along with valid visa)",
+    poi: true,
+    pdb: true,
+    note: "Validity: till the validity of the visa. Provide Proof of Address and Proof of Date of Birth documents from List III.",
   },
   frroPermit: {
-    label: "FRRO/FRO Registration Certificate or Residential Permit (except OCI/LTV/Nepal/Bhutan)",
-    poi: true,
+    label: "Valid Registration Certificate or Residential permit issued by FRRO/FRO to the foreign national (except OCI cardholders, LTV document holders and Nepal/Bhutan nationals)",
     poa: true,
   },
   // Generic buckets
@@ -396,7 +720,10 @@ type UpdateNote = {
 type UpdateGroup = {
   title: string;
   description: string;
-  bullets: string[];
+  documents: Array<{
+    label: string;
+    docId?: string;
+  }>;
   note?: UpdateNote;
 };
 
@@ -404,89 +731,155 @@ export const UPDATE_DOCS: Record<"name" | "address" | "dateOfBirth" | "gender", 
   name: {
     title: "Name Update",
     description: "Acceptable documents for name updates:",
-    bullets: [
-      "Valid Indian Passport (with name and photograph)",
-      "PAN Card / e-PAN Card (with name and photograph)",
-      "Ration / PDS Photograph Card / e-Ration Card",
-      "Voter Identity Card / e-Voter Identity Card",
-      "Driving Licence",
-      "Service Photo Identity Card (Govt/PSU)",
-      "Marriage Certificate (with or without photograph)",
-      "Gazette Notification of name change (with supporting PoI document)",
+    documents: [
+      {
+        label: "Valid Indian Passport (with name and photograph)",
+        docId: "indian-passport",
+      },
+      {
+        label: "PAN Card / e-PAN Card (with name and photograph)",
+        docId: "pan-card",
+      },
+      {
+        label: "Ration / PDS Photograph Card / e-Ration Card",
+        docId: "ration-card",
+      },
+      {
+        label: "Voter Identity Card / e-Voter Identity Card",
+        docId: "voter-id",
+      },
+      { label: "Driving Licence", docId: "driving-licence" },
+      {
+        label: "Service Photo Identity Card (Govt/PSU)",
+        docId: "service-photo-id",
+      },
+      {
+        label: "Marriage Certificate (with or without photograph)",
+        docId: "marriage-certificate",
+      },
+      {
+        label: "Gazette Notification of name change (with supporting PoI document)",
+        docId: "gazette-notification",
+      },
     ],
     note: {
       title: "Important Notes",
       tone: "info",
-      bullets: [
-        "Name in Aadhaar will exactly match the supporting document.",
-        "No additional information such as parent/guardian names will be considered.",
-        "For marriage-related name changes, Marriage Certificate is required.",
-      ],
+      bullets: ["Name in Aadhaar will exactly match the supporting document.", "No additional information such as parent/guardian names will be considered.", "For marriage-related name changes, Marriage Certificate is required."],
     },
   },
   address: {
     title: "Address Update",
     description: "Acceptable documents for address updates:",
-    bullets: [
-      "Valid Indian Passport",
-      "Ration / PDS Photograph Card / e-Ration Card",
-      "Voter Identity Card / e-Voter Identity Card",
-      "Electricity bill (not older than 3 months)",
-      "Water bill (not older than 3 months)",
-      "Telephone / Mobile / Broadband bill (not older than 3 months)",
-      "Property Tax Receipt (not older than 1 year)",
-      "Sale agreement / Rent agreement / Lease agreement",
-      "Bank Account Statement (not older than 3 months)",
-      "Gas connection bill (not older than 3 months)",
-      "UIDAI Standard Certificate (by authorised persons)",
-      "Self-declaration from HoF (for immediate family members)",
+    documents: [
+      { label: "Valid Indian Passport", docId: "indian-passport" },
+      {
+        label: "Ration / PDS Photograph Card / e-Ration Card",
+        docId: "ration-card",
+      },
+      {
+        label: "Voter Identity Card / e-Voter Identity Card",
+        docId: "voter-id",
+      },
+      {
+        label: "Electricity bill (not older than 3 months)",
+        docId: "electricity-bill",
+      },
+      {
+        label: "Water bill (not older than 3 months)",
+        docId: "water-bill",
+      },
+      {
+        label: "Telephone / Mobile / Broadband bill (not older than 3 months)",
+        docId: "telephone-bill",
+      },
+      {
+        label: "Property Tax Receipt (not older than 1 year)",
+        docId: "property-tax",
+      },
+      {
+        label: "Sale agreement / Rent agreement / Lease agreement",
+        docId: "property-agreement",
+      },
+      {
+        label: "Bank Account Statement (not older than 3 months)",
+        docId: "bank-statement",
+      },
+      {
+        label: "Gas connection bill (not older than 3 months)",
+        docId: "gas-bill",
+      },
+      {
+        label: "UIDAI Standard Certificate (by authorised persons)",
+        docId: "uidai-standard",
+      },
+      {
+        label: "Self-declaration from HoF (for immediate family members)",
+        docId: "hof-self-declaration",
+      },
     ],
     note: {
       title: "Important Notes",
       tone: "info",
-      bullets: [
-        "Document must contain both name and address.",
-        "All utility bills should not be older than 3 months.",
-        "HoF self-declaration can be used for immediate family members.",
-      ],
+      bullets: ["Document must contain both name and address.", "All utility bills should not be older than 3 months.", "HoF self-declaration can be used for immediate family members."],
     },
   },
   dateOfBirth: {
     title: "Date of Birth Update",
     description: "Acceptable documents for Date of Birth updates:",
-    bullets: [
-      "Birth Certificate (mandatory for 0–18 years and those born on/after 1.10.2023)",
-      "Valid Indian Passport",
-      "Service Photo Identity Card (Govt/PSU)",
-      "Pensioner / Freedom Fighter Photo Identity Card",
-      "Mark-sheet / Certificate (Board / University)",
-      "Self-declaration with Birth Certificate (for exception cases)",
+    documents: [
+      {
+        label: "Birth Certificate (mandatory for 0–18 years and those born on/after 1.10.2023)",
+        docId: "birth-certificate",
+      },
+      { label: "Valid Indian Passport", docId: "indian-passport" },
+      {
+        label: "Service Photo Identity Card (Govt/PSU)",
+        docId: "service-photo-id",
+      },
+      {
+        label: "Pensioner / Freedom Fighter Photo Identity Card",
+        docId: "pensioner-photo-id",
+      },
+      {
+        label: "Mark-sheet / Certificate (Board / University)",
+        docId: "marksheet-certificate",
+      },
+      {
+        label: "Self-declaration with Birth Certificate (for exception cases)",
+        docId: "self-declaration-birth",
+      },
     ],
     note: {
       title: "Mandatory Requirements",
       tone: "warn",
-      bullets: [
-        "Birth Certificate is mandatory for all individuals between 0–18 years.",
-        "For Resident Indians and NRIs born on/after 1.10.2023, Birth Certificate is mandatory.",
-      ],
+      bullets: ["Birth Certificate is mandatory for all individuals between 0–18 years.", "For Resident Indians and NRIs born on/after 1.10.2023, Birth Certificate is mandatory."],
     },
   },
   gender: {
     title: "Gender Update",
     description: "Acceptable documents for gender updates:",
-    bullets: [
-      "Valid Indian Passport (with gender information)",
-      "Third gender / Transgender Identity Card / Certificate",
-      "Medical Certificate from surgeon (for surgical gender change)",
-      "Any valid PoI document with gender information",
+    documents: [
+      {
+        label: "Valid Indian Passport (with gender information)",
+        docId: "indian-passport",
+      },
+      {
+        label: "Third gender / Transgender Identity Card / Certificate",
+        docId: "transgender-id",
+      },
+      {
+        label: "Medical Certificate from surgeon (for surgical gender change)",
+        docId: "medical-gender-certificate",
+      },
+      {
+        label: "Any valid PoI document with gender information",
+      },
     ],
     note: {
       title: "Important Notes",
       tone: "info",
-      bullets: [
-        "For surgical gender change, Medical Certificate from surgeon is required.",
-        "Transgender Identity Card / Certificate is accepted as valid proof.",
-      ],
+      bullets: ["For surgical gender change, Medical Certificate from surgeon is required.", "Transgender Identity Card / Certificate is accepted as valid proof."],
     },
   },
 };
@@ -495,8 +888,23 @@ export const UPDATE_DOCS: Record<"name" | "address" | "dateOfBirth" | "gender", 
  * Results generation blocks
  * ----------------------------- */
 export type ResultBlock =
-  | { kind: "matrix"; rows: Array<{ label: string; poi: boolean; poa: boolean; por: boolean; pdb: boolean; note?: string }> }
-  | { kind: "section"; title: string; bullets: string[]; tone?: "info" | "warn" | "danger" }
+  | {
+      kind: "matrix";
+      rows: Array<{
+        label: string;
+        poi: boolean;
+        poa: boolean;
+        por: boolean;
+        pdb: boolean;
+        note?: string;
+      }>;
+    }
+  | {
+      kind: "section";
+      title: string;
+      bullets: string[];
+      tone?: "info" | "warn" | "danger";
+    }
   | { kind: "table"; table: "foreign" | "shelter" | "hofUpto5" }
   | { kind: "heading"; title: string; subtitle?: string }
   | {
@@ -504,7 +912,7 @@ export type ResultBlock =
       groups: Array<{
         title: string;
         description: string;
-        bullets: string[];
+        documents: Array<{ label: string; docId?: string }>;
         note?: UpdateNote;
       }>;
     };
@@ -526,9 +934,7 @@ export function computeResults(formData: Record<string, string>): ResultBlock[] 
   // UPDATE FLOW (List IV) — accordion with 4 groups
   if (purpose === "update") {
     const updateSelections = parseMulti(formData.updateDocuments);
-    const groups = updateSelections
-      .map((key) => UPDATE_DOCS[key as keyof typeof UPDATE_DOCS])
-      .filter((group): group is UpdateGroup => Boolean(group));
+    const groups = updateSelections.map((key) => UPDATE_DOCS[key as keyof typeof UPDATE_DOCS]).filter((group): group is UpdateGroup => Boolean(group));
 
     out.push({ kind: "updateAccordion", groups });
 
@@ -566,9 +972,47 @@ export function computeResults(formData: Record<string, string>): ResultBlock[] 
       bullets: [
         "Original documents must be presented for verification.",
         "Name in Aadhaar will match the supporting document.",
-        "One parent's/guardian’s biometric authentication is mandatory.",
+        "One parent's/guardian's biometric authentication is mandatory.",
         "For those born on/after 1.10.2023, Birth Certificate is mandatory.",
         "HoF must have a valid Aadhaar; address in HoF Aadhaar will be used for child.",
+        "Legal guardianship documents establish only Proof of Relationship; carry a separate Proof of Date of Birth document.",
+        "Foreign/OCI/Nepal/Bhutan/LTV enrolments must bring additional PoA/PDB documents from List III wherever marked not acceptable above.",
+      ],
+    });
+
+    return out;
+  }
+
+  // NEW ENROLMENT: 5–18 years – List II matrix with alphabetical ordering
+  if (age === "5to18") {
+    const keys = (selected.length ? selected : Object.keys(LIST_II_MATRIX)).filter((k) => LIST_II_MATRIX[k]);
+
+    const rows = keys.map((k) => {
+      const e = LIST_II_MATRIX[k];
+      return {
+        label: e.label,
+        poi: !!e.poi,
+        poa: !!e.poa,
+        por: !!e.por,
+        pdb: !!e.pdb,
+        note: e.note,
+      };
+    });
+
+    const sortedRows = [...rows].sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+
+    out.push({ kind: "matrix", rows: sortedRows });
+
+    out.push({
+      kind: "section",
+      title: "Important Notes",
+      bullets: [
+        "Each document must be current, issued to the child, verifiable with the issuing authority, and not withdrawn or suspended.",
+        "All PoI, PoA, PoR and Proof of Date of Birth documents must be in the child's name; PoR documents must also mention the Head of Family.",
+        "Ensure the child's name and date of birth match exactly across every document submitted.",
+        "Children aged 5–18 are encouraged to enrol through the Head of Family. The HoF must have a valid Aadhaar, provide biometric authentication, and their Aadhaar address will populate the child's record. Provide both parents' Aadhaar numbers wherever available.",
+        "Items marked with * require an additional Proof of Address document from List III. Validity: OCI and Nepal/Bhutan nationals – 10 years; LTV holders – till Long Term Visa validity; other foreign nationals – till visa validity.",
+        "If HoF or Proof of Relationship documents are unavailable, enrolment may proceed through document-based PoI/PoA/PDB submission.",
       ],
     });
 
@@ -576,7 +1020,7 @@ export function computeResults(formData: Record<string, string>): ResultBlock[] 
   }
 
   // NEW ENROLMENT: 5–18 or 18+ – Matrix view (List III)
-  const keys = (selected.length ? selected : ["passport", "dl", "voter", "poa", "pdb"]).filter((k) => LIST_III_MATRIX[k]);
+  const keys = (selected.length ? selected : Object.keys(LIST_III_MATRIX)).filter((k) => LIST_III_MATRIX[k]);
 
   const rows = keys.map((k) => {
     const e = LIST_III_MATRIX[k];
@@ -590,11 +1034,19 @@ export function computeResults(formData: Record<string, string>): ResultBlock[] 
     };
   });
 
-  out.push({ kind: "matrix", rows });
+  const sortedRows = [...rows].sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+
+  out.push({ kind: "matrix", rows: sortedRows });
   out.push({
     kind: "section",
     title: "Important Notes",
-    bullets: ["PoI must include name & photograph.", "PoA must include name & address; bills should be ≤ 3 months old.", "All documents must be currently valid and in the individual's name.", "Name & DoB must be uniform across submitted documents."],
+    bullets: [
+      "All documents must be current, issued to the resident, verifiable with the issuing authority and not withdrawn or cancelled.",
+      "Proof of Identity must include the resident's name and photograph; Proof of Address must include the resident's name and address in India.",
+      "Proof of Relationship documents are required only for Head of Family based enrolment and must contain the resident's name and the HoF's name.",
+      "The resident's name and date of birth must match exactly across every PoI, PoA, PoR and Proof of Date of Birth document submitted.",
+      "Items marked with * require a separate Proof of Address document from this list. Validity: OCI and Nepal/Bhutan nationals – 10 years; Long Term Visa holders – till LTV validity; other foreign nationals – till visa validity.",
+    ],
   });
 
   return out;
