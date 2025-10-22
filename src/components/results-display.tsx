@@ -1,15 +1,67 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { RotateCcw, ArrowLeft, Printer, Check, X, AlertTriangle, AlertOctagon, Info } from "lucide-react";
+import {
+  AlertOctagon,
+  AlertTriangle,
+  ArrowLeft,
+  Check,
+  Info,
+  Printer,
+  RotateCcw,
+  X,
+} from "lucide-react";
 import type React from "react";
-import { computeResults, parseMulti, wizardConfig, type ResultBlock } from "@/config/wizard-config";
+import { useState } from "react";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { documentDetails } from "@/config/document-details";
+import {
+  computeResults,
+  LIST_I,
+  parseMulti,
+  type ResultBlock,
+  wizardConfig,
+} from "@/config/wizard-config";
 
 /* ---------- Colored callout with icons ---------- */
-function NoteBox({ title, children, tone = "info" }: { title: string; children: React.ReactNode; tone?: "info" | "warn" | "danger" }) {
+function NoteBox({
+  title,
+  children,
+  tone = "info",
+}: {
+  title: string;
+  children: React.ReactNode;
+  tone?: "info" | "warn" | "danger";
+}) {
   const toneConfig = {
     info: {
       wrapper: "border-blue-200 bg-blue-50",
@@ -32,12 +84,30 @@ function NoteBox({ title, children, tone = "info" }: { title: string; children: 
   const Icon = config.Icon;
   return (
     <div className={`rounded-md border p-4 text-sm ${config.wrapper}`}>
-      <div className={`mb-2 flex items-center gap-2 font-semibold ${config.heading}`}>
+      <div
+        className={`mb-2 flex items-center gap-2 font-semibold ${config.heading}`}
+      >
         <Icon className="h-4 w-4" />
         {title}
       </div>
       <div className="text-muted-foreground">{children}</div>
     </div>
+  );
+}
+
+function AcceptBadge({ ok }: { ok: boolean }) {
+  return ok ? (
+    <span className="inline-flex items-center gap-1 text-green-600">
+      <Check className="h-4 w-4" />{" "}
+      <span className="hidden sm:inline">Acceptable</span>
+      <span className="sm:hidden">Acc</span>
+    </span>
+  ) : (
+    <span className="inline-flex items-center gap-1 text-red-600">
+      <X className="h-4 w-4" />{" "}
+      <span className="hidden sm:inline">Not acceptable</span>
+      <span className="sm:hidden">Not</span>
+    </span>
   );
 }
 
@@ -47,36 +117,37 @@ function ForeignNationalTable() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[40%]">Category</TableHead>
-          <TableHead className="w-[40%]">Required Documents</TableHead>
+          <TableHead className="w-[20%]">Category</TableHead>
+          <TableHead className="w-[30%]">Required Documents</TableHead>
+          <TableHead className="w-[10%]">PoI</TableHead>
+          <TableHead className="w-[10%]">PoA</TableHead>
+          <TableHead className="w-[10%]">PDB</TableHead>
           <TableHead className="w-[20%]">Notes</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          <TableCell className="whitespace-normal break-words">OCI Card Holders</TableCell>
-          <TableCell className="whitespace-normal break-words">Valid foreign passport + OCI card</TableCell>
-          <TableCell>Validity: 10 years</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell className="whitespace-normal break-words">Nepal/Bhutan Nationals</TableCell>
-          <TableCell className="whitespace-normal break-words">
-            Passport OR Citizenship Certificate + Limited validity Photo ID Certificate
-          </TableCell>
-          <TableCell>Validity: 10 years</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell className="whitespace-normal break-words">LTV Holders</TableCell>
-          <TableCell className="whitespace-normal break-words">
-            Valid Long Term Visa (minority communities of AFG/BGD/PAK)
-          </TableCell>
-          <TableCell>Validity: till LTV validity</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell className="whitespace-normal break-words">Other Foreign Nationals</TableCell>
-          <TableCell className="whitespace-normal break-words">Valid foreign passport + valid visa</TableCell>
-          <TableCell>Validity: till visa validity</TableCell>
-        </TableRow>
+        {LIST_I.foreign.map((entry) => (
+          <TableRow key={entry.category}>
+            <TableCell className="whitespace-normal break-words font-medium">
+              {entry.category}
+            </TableCell>
+            <TableCell className="whitespace-normal break-words">
+              {entry.documents}
+            </TableCell>
+            <TableCell>
+              <AcceptBadge ok={entry.poi} />
+            </TableCell>
+            <TableCell>
+              <AcceptBadge ok={entry.poa} />
+            </TableCell>
+            <TableCell>
+              <AcceptBadge ok={entry.pdb} />
+            </TableCell>
+            <TableCell className="whitespace-normal break-words text-muted-foreground">
+              {entry.note ?? "—"}
+            </TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );
@@ -87,19 +158,33 @@ function ShelterDocBasedTable() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[60%]">Document Type</TableHead>
-          <TableHead className="w-[20%]">Required For</TableHead>
-          <TableHead className="w-[20%]">Notes</TableHead>
+          <TableHead className="w-[45%]">Document Type</TableHead>
+          <TableHead className="w-[15%]">PoI</TableHead>
+          <TableHead className="w-[15%]">PoA</TableHead>
+          <TableHead className="w-[15%]">PDB</TableHead>
+          <TableHead className="w-[10%]">Notes</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          <TableCell className="whitespace-normal break-words">
-            UIDAI Standard Certificate by DCPO + CCI placement order (Form 18, JJ Rules)
-          </TableCell>
-          <TableCell>PoI, PoA</TableCell>
-          <TableCell>Applicable only for the child of the concerned CCI</TableCell>
-        </TableRow>
+        {LIST_I.documentBased.map((entry, index) => (
+          <TableRow key={`${entry.document}-${index}`}>
+            <TableCell className="whitespace-normal break-words">
+              {entry.document}
+            </TableCell>
+            <TableCell>
+              <AcceptBadge ok={entry.poi} />
+            </TableCell>
+            <TableCell>
+              <AcceptBadge ok={entry.poa} />
+            </TableCell>
+            <TableCell>
+              <AcceptBadge ok={entry.pdb} />
+            </TableCell>
+            <TableCell className="whitespace-normal break-words text-muted-foreground">
+              {entry.note ?? "—"}
+            </TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );
@@ -110,22 +195,29 @@ function HofUpto5Table() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[60%]">Document Type</TableHead>
-          <TableHead className="w-[20%]">Required For</TableHead>
-          <TableHead className="w-[20%]">Notes</TableHead>
+          <TableHead className="w-[55%]">Document Type</TableHead>
+          <TableHead className="w-[15%]">PoR</TableHead>
+          <TableHead className="w-[15%]">PDB</TableHead>
+          <TableHead className="w-[15%]">Notes</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          <TableCell className="whitespace-normal break-words">Birth Certificate</TableCell>
-          <TableCell>PoR, PDB</TableCell>
-          <TableCell>Mandatory on/after 1.10.2023; must mention child & HoF names</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell className="whitespace-normal break-words">Legal Guardianship Document</TableCell>
-          <TableCell>PoR</TableCell>
-          <TableCell>If applicable; HoF must have valid Aadhaar</TableCell>
-        </TableRow>
+        {LIST_I.hofBased.map((entry, index) => (
+          <TableRow key={`${entry.document}-${index}`}>
+            <TableCell className="whitespace-normal break-words">
+              {entry.document}
+            </TableCell>
+            <TableCell>
+              <AcceptBadge ok={entry.por} />
+            </TableCell>
+            <TableCell>
+              <AcceptBadge ok={entry.pdb} />
+            </TableCell>
+            <TableCell className="whitespace-normal break-words text-muted-foreground">
+              {entry.note ?? "—"}
+            </TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );
@@ -136,71 +228,158 @@ type MatrixBlock = Extract<ResultBlock, { kind: "matrix" }>;
 
 function EligibilityMatrix({ rows }: MatrixBlock) {
   const hasNotes = rows.some((r) => !!r.note);
-
-  const Badge = ({ ok }: { ok: boolean }) =>
-    ok ? (
-      <span className="inline-flex items-center gap-1 text-green-600">
-        <Check className="h-4 w-4" /> <span className="hidden sm:inline">Acceptable</span>
-        <span className="sm:hidden">Acc</span>
-      </span>
-    ) : (
-      <span className="inline-flex items-center gap-1 text-red-600">
-        <X className="h-4 w-4" /> <span className="hidden sm:inline">Not acceptable</span>
-        <span className="sm:hidden">Not</span>
-      </span>
-    );
-
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[60%]">Document</TableHead>
-          <TableHead className="w-[10%]">PoI</TableHead>
-          <TableHead className="w-[10%]">PoA</TableHead>
-          <TableHead className="w-[10%]">PoR</TableHead>
-          <TableHead className="w-[10%]">PDB</TableHead>
-          {hasNotes && <TableHead>Notes</TableHead>}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {rows.map((r, i) => (
-          <TableRow key={`${r.label}-${i}`}>
-            <TableCell className="font-medium whitespace-normal break-words">{r.label}</TableCell>
-            <TableCell><Badge ok={!!r.poi} /></TableCell>
-            <TableCell><Badge ok={!!r.poa} /></TableCell>
-            <TableCell><Badge ok={!!r.por} /></TableCell>
-            <TableCell><Badge ok={!!r.pdb} /></TableCell>
-            {hasNotes && <TableCell className="text-muted-foreground whitespace-normal break-words">{r.note ?? ""}</TableCell>}
+    <div className="w-full overflow-x-auto">
+      <Table className="min-w-[960px]">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[50%]">Document</TableHead>
+            <TableHead className="w-[12%]">PoI</TableHead>
+            <TableHead className="w-[12%]">PoA</TableHead>
+            <TableHead className="w-[12%]">PoR</TableHead>
+            <TableHead className="w-[12%]">PDB</TableHead>
+            {hasNotes && <TableHead className="min-w-[200px]">Notes</TableHead>}
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {rows.map((r, i) => (
+            <TableRow key={`${r.label}-${i}`}>
+              <TableCell className="font-medium whitespace-normal break-words">
+                {r.label}
+              </TableCell>
+              <TableCell>
+                <AcceptBadge ok={!!r.poi} />
+              </TableCell>
+              <TableCell>
+                <AcceptBadge ok={!!r.poa} />
+              </TableCell>
+              <TableCell>
+                <AcceptBadge ok={!!r.por} />
+              </TableCell>
+              <TableCell>
+                <AcceptBadge ok={!!r.pdb} />
+              </TableCell>
+              {hasNotes && (
+                <TableCell className="text-muted-foreground whitespace-normal break-words">
+                  {r.note ?? ""}
+                </TableCell>
+              )}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
 
 /* ---------- Update accordion ---------- */
-function UpdateAccordion({ groups }: { groups: Array<{ title: string; description: string; bullets: string[]; note?: { title: string; bullets: string[]; tone?: "info" | "warn" | "danger" } }> }) {
+function UpdateAccordion({
+  groups,
+}: {
+  groups: Array<{
+    title: string;
+    description: string;
+    documents: Array<{ label: string; docId?: string }>;
+    note?: {
+      title: string;
+      bullets: string[];
+      tone?: "info" | "warn" | "danger";
+    };
+  }>;
+}) {
+  const [activeDocId, setActiveDocId] = useState<string | null>(null);
   if (!groups.length) return null;
   return (
-    <Accordion type="multiple" className="w-full">
-      {groups.map((g, idx) => (
-        <AccordionItem key={idx} value={g.title.toLowerCase().replace(/\s+/g, "-")}>
-          <AccordionTrigger className="text-base">{g.title}</AccordionTrigger>
-          <AccordionContent>
-            <p className="text-sm text-muted-foreground mb-2">{g.description}</p>
-            <ul className="list-disc pl-6 space-y-1">
-              {g.bullets.map((b, i) => (
-                <li key={i} className="whitespace-normal break-words">
-                  {b}
-                </li>
-              ))}
-            </ul>
+    <Accordion
+      type="multiple"
+      className="w-full rounded-lg border border-border/60 bg-background/60"
+    >
+      {groups.map((g) => (
+        <AccordionItem
+          key={g.title}
+          value={g.title.toLowerCase().replace(/\s+/g, "-")}
+          className="border-border/50 px-2 first:rounded-t-lg last:rounded-b-lg last:border-b-0"
+        >
+          <AccordionTrigger className="text-base font-semibold">
+            {g.title}
+          </AccordionTrigger>
+          <AccordionContent className="space-y-3 px-2 pt-0 pb-4">
+            <p className="text-sm text-muted-foreground">{g.description}</p>
+            {g.documents.length > 0 && (
+              <ul className="grid gap-2 sm:grid-cols-2">
+                {g.documents.map((doc, index) => {
+                  const detail = doc.docId ? documentDetails[doc.docId] : null;
+                  const key = doc.docId ?? `${g.title}-${index}`;
+                  if (detail) {
+                    return (
+                      <li key={key}>
+                        <Dialog
+                          open={activeDocId === detail.id}
+                          onOpenChange={(open) => {
+                            if (open) {
+                              setActiveDocId(detail.id);
+                            } else if (activeDocId === detail.id) {
+                              setActiveDocId(null);
+                            }
+                          }}
+                        >
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className="h-full w-full justify-start text-left whitespace-normal break-words"
+                            >
+                              {doc.label}
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-xl">
+                            <DialogHeader className="space-y-1">
+                              <DialogTitle>{detail.title}</DialogTitle>
+                              {detail.subtitle && (
+                                <DialogDescription>
+                                  {detail.subtitle}
+                                </DialogDescription>
+                              )}
+                            </DialogHeader>
+                            {detail.bullets?.length ? (
+                              <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed">
+                                {detail.bullets.map((bullet) => (
+                                  <li
+                                    key={`${detail.id}-${bullet}`}
+                                    className="whitespace-normal break-words"
+                                  >
+                                    {bullet}
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : (
+                              <p className="text-sm text-muted-foreground">
+                                Follow the general advisory guidance above.
+                              </p>
+                            )}
+                          </DialogContent>
+                        </Dialog>
+                      </li>
+                    );
+                  }
+                  return (
+                    <li key={key}>
+                      <div className="h-full w-full rounded-md border border-dashed border-border/60 bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+                        {doc.label}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
             {g.note && (
-              <div className="mt-3">
+              <div className="border-t border-border/40 pt-3">
                 <NoteBox title={g.note.title} tone={g.note.tone ?? "info"}>
                   <ul className="list-disc pl-6 space-y-1">
-                    {g.note.bullets.map((note, i) => (
-                      <li key={i} className="whitespace-normal break-words">
+                    {g.note.bullets.map((note) => (
+                      <li
+                        key={`${g.note?.title}-${note}`}
+                        className="whitespace-normal break-words"
+                      >
                         {note}
                       </li>
                     ))}
@@ -215,7 +394,13 @@ function UpdateAccordion({ groups }: { groups: Array<{ title: string; descriptio
   );
 }
 
-const SUMMARY_ORDER = ["purpose", "ageGroup", "category", "enrolmentType", "updateDocuments"] as const;
+const SUMMARY_ORDER = [
+  "purpose",
+  "ageGroup",
+  "category",
+  "enrolmentType",
+  "updateDocuments",
+] as const;
 
 const SUMMARY_LABELS: Record<string, string> = {
   purpose: "Purpose",
@@ -240,12 +425,14 @@ function buildSummary(formData: Record<string, string>): SummaryItem[] {
     if (step.type === "checkbox") {
       const entries = parseMulti(raw);
       if (!entries.length) continue;
-      const values = entries
-        .map((entry) => step.options.find((o) => o.value === entry)?.label ?? entry);
+      const values = entries.map(
+        (entry) => step.options.find((o) => o.value === entry)?.label ?? entry,
+      );
       if (!values.length) continue;
       items.push({ id, label, values });
     } else {
-      const optionLabel = step.options.find((o) => o.value === raw)?.label ?? raw;
+      const optionLabel =
+        step.options.find((o) => o.value === raw)?.label ?? raw;
       items.push({ id, label, value: optionLabel });
     }
   }
@@ -264,7 +451,10 @@ export function ResultsDisplay({
   stepIndicator?: React.ReactNode;
 }) {
   const blocks = computeResults(formData);
-  const heading = blocks.find((b) => b.kind === "heading") as any;
+  const heading = blocks.find(
+    (block): block is Extract<ResultBlock, { kind: "heading" }> =>
+      block.kind === "heading",
+  );
   const summaryItems = buildSummary(formData);
 
   return (
@@ -296,11 +486,19 @@ export function ResultsDisplay({
             <div className="flex items-center justify-between gap-3">
               <div>
                 <CardTitle className="text-2xl">{heading?.title}</CardTitle>
-                {heading?.subtitle && <CardDescription className="text-base">{heading.subtitle}</CardDescription>}
+                {heading?.subtitle && (
+                  <CardDescription className="text-base">
+                    {heading.subtitle}
+                  </CardDescription>
+                )}
               </div>
 
               <div className="no-print flex items-center gap-2">
-                <Button variant="outline" onClick={() => window.print()} className="gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => window.print()}
+                  className="gap-2"
+                >
                   <Printer className="h-4 w-4" />
                   Print
                 </Button>
@@ -315,35 +513,51 @@ export function ResultsDisplay({
                 <div className="mt-3 grid gap-4 md:grid-cols-2">
                   {summaryItems.map((item) => (
                     <div key={item.id} className="space-y-1">
-                      <p className="text-sm font-medium text-foreground">{item.label}</p>
+                      <p className="text-sm font-medium text-foreground">
+                        {item.label}
+                      </p>
                       {"values" in item ? (
                         <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1">
-                          {item.values.map((val, idx) => (
-                            <li key={idx}>{val}</li>
+                          {item.values.map((val) => (
+                            <li key={`${item.id}-${val}`}>{val}</li>
                           ))}
                         </ul>
                       ) : (
-                        <p className="text-sm text-muted-foreground">{item.value}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {item.value}
+                        </p>
                       )}
                     </div>
                   ))}
                 </div>
               </div>
             )}
-            {blocks.map((block, i) => {
+            {blocks.map((block) => {
               if (block.kind === "heading") return null;
 
               if (block.kind === "table") {
-                if (block.table === "foreign") return <ForeignNationalTable key={i} />;
-                if (block.table === "shelter") return <ShelterDocBasedTable key={i} />;
-                if (block.table === "hofUpto5") return <HofUpto5Table key={i} />;
+                if (block.table === "foreign")
+                  return <ForeignNationalTable key={`table-${block.table}`} />;
+                if (block.table === "shelter")
+                  return <ShelterDocBasedTable key={`table-${block.table}`} />;
+                if (block.table === "hofUpto5")
+                  return <HofUpto5Table key={`table-${block.table}`} />;
               }
 
               if (block.kind === "matrix") {
                 return (
-                  <div key={i} className="space-y-2">
-                    <h3 className="text-xl font-semibold">Document Eligibility Matrix</h3>
-                    <p className="text-sm text-muted-foreground">Based on your selected documents:</p>
+                  <div
+                    key={`matrix-${block.rows
+                      .map((row) => row.label)
+                      .join("|")}`}
+                    className="space-y-2"
+                  >
+                    <h3 className="text-xl font-semibold">
+                      Document Eligibility Matrix
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Based on your selected documents:
+                    </p>
                     {/* pass kind to satisfy TS */}
                     <EligibilityMatrix kind="matrix" rows={block.rows} />
                   </div>
@@ -352,16 +566,26 @@ export function ResultsDisplay({
 
               if (block.kind === "updateAccordion") {
                 return (
-                  <UpdateAccordion key={i} groups={block.groups} />
+                  <UpdateAccordion
+                    key={`update-${block.groups.map((g) => g.title).join("|")}`}
+                    groups={block.groups}
+                  />
                 );
               }
 
               if (block.kind === "section") {
                 return (
-                  <NoteBox key={i} title={block.title} tone={block.tone ?? "info"}>
+                  <NoteBox
+                    key={`section-${block.title}`}
+                    title={block.title}
+                    tone={block.tone ?? "info"}
+                  >
                     <ul className="list-disc pl-6 space-y-1">
-                      {block.bullets.map((b, j) => (
-                        <li key={j} className="whitespace-normal break-words">
+                      {block.bullets.map((b) => (
+                        <li
+                          key={`${block.title}-${b}`}
+                          className="whitespace-normal break-words"
+                        >
                           {b}
                         </li>
                       ))}
@@ -375,12 +599,20 @@ export function ResultsDisplay({
 
             {/* Action bar: Back + Start Over */}
             <div className="flex items-center justify-between">
-              <Button variant="outline" onClick={onBack} className="gap-2 bg-transparent">
+              <Button
+                variant="outline"
+                onClick={onBack}
+                className="gap-2 bg-transparent"
+              >
                 <ArrowLeft className="h-4 w-4" />
                 Back
               </Button>
 
-              <Button variant="outline" onClick={onReset} className="gap-2 bg-transparent">
+              <Button
+                variant="outline"
+                onClick={onReset}
+                className="gap-2 bg-transparent"
+              >
                 <RotateCcw className="h-4 w-4" />
                 Start Over
               </Button>
@@ -388,9 +620,14 @@ export function ResultsDisplay({
 
             <footer className="text-xs text-muted-foreground border-t pt-3 mt-6">
               <p>
-                This checklist is derived from UIDAI Schedule II — Lists I–IV (official document requirements). For the
-                latest version, visit{" "}
-                <a href="https://uidai.gov.in" target="_blank" rel="noopener noreferrer" className="underline text-primary">
+                This checklist is derived from UIDAI Schedule II — Lists I–IV
+                (official document requirements). For the latest version, visit{" "}
+                <a
+                  href="https://uidai.gov.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline text-primary"
+                >
                   uidai.gov.in
                 </a>
                 .

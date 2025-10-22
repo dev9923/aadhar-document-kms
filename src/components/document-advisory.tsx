@@ -1,33 +1,37 @@
 "use client";
 
-import { advisoryConfig } from "@/config/advisory-config";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { FileText, Info, ListCheck, Paperclip } from "lucide-react";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { advisoryConfig } from "@/config/advisory-config";
+import { documentDetails } from "@/config/document-details";
 
 export function DocumentAdvisory() {
   return (
     <div className="mx-auto max-w-4xl space-y-8">
-      <div className="text-center space-y-3">
-        <h2 className="text-3xl font-bold tracking-tight">{advisoryConfig.pageTitle}</h2>
-        <p className="text-muted-foreground text-lg leading-snug text-balance">
-          {advisoryConfig.pageDescription}
-        </p>
-      </div>
-
       {/* General spec */}
       <Card className="gap-4">
         <CardHeader className="gap-0">
           <div className="flex items-center gap-2">
             <Info className="h-5 w-5 text-emerald-600" />
-            <CardTitle className="text-lg">{advisoryConfig.generalSpec.title}</CardTitle>
+            <CardTitle className="text-lg">
+              {advisoryConfig.generalSpec.title}
+            </CardTitle>
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">{advisoryConfig.acknowledgeLabel}</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {advisoryConfig.acknowledgeLabel}
+          </p>
         </CardHeader>
         <CardContent className="space-y-4 text-sm leading-relaxed">
           <ul className="list-disc space-y-1 pl-6">
-            {advisoryConfig.generalSpec.bullets.map((b, i) => (
-              <li key={i}>{b}</li>
+            {advisoryConfig.generalSpec.bullets.map((bullet) => (
+              <li key={bullet}>{bullet}</li>
             ))}
           </ul>
 
@@ -51,7 +55,9 @@ export function DocumentAdvisory() {
         <CardHeader className="gap-0">
           <div className="flex items-center gap-2">
             <ListCheck className="h-5 w-5 text-sky-600" />
-            <CardTitle className="text-lg">{advisoryConfig.groups[0].title}</CardTitle>
+            <CardTitle className="text-lg">
+              {advisoryConfig.groups[0].title}
+            </CardTitle>
           </div>
           <p className="text-sm text-muted-foreground">
             Expand an item to view its official name and advisory requirements.
@@ -59,30 +65,40 @@ export function DocumentAdvisory() {
         </CardHeader>
         <CardContent>
           <Accordion type="multiple" className="w-full">
-            {advisoryConfig.groups.map((group) =>
-              group.items.map((it) => (
-                <AccordionItem key={it.id} value={it.id}>
-                  <AccordionTrigger className="text-left">
-                    <div className="flex flex-col items-start gap-1">
-                      <span className="text-sm font-semibold text-foreground">{it.title}</span>
-                      {it.subtitle && <span className="text-xs text-muted-foreground leading-relaxed">{it.subtitle}</span>}
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className="text-sm leading-relaxed text-foreground">
-                    {it.bullets?.length ? (
-                      <ul className="list-disc space-y-1 pl-6">
-                        {it.bullets.map((b, i) => (
-                          <li key={i}>{b}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <div className="rounded-md border border-dashed border-muted-foreground/40 bg-muted/20 px-3 py-2 text-muted-foreground">
-                        Follow the general document quality rules above.
+            {advisoryConfig.groups.flatMap((group) =>
+              group.itemIds.map((id) => {
+                const detail = documentDetails[id];
+                if (!detail) return null;
+                return (
+                  <AccordionItem key={detail.id} value={detail.id}>
+                    <AccordionTrigger className="text-left">
+                      <div className="flex flex-col items-start gap-1">
+                        <span className="text-sm font-semibold text-foreground">
+                          {detail.title}
+                        </span>
+                        {detail.subtitle && (
+                          <span className="text-xs text-muted-foreground leading-relaxed">
+                            {detail.subtitle}
+                          </span>
+                        )}
                       </div>
-                    )}
-                  </AccordionContent>
-                </AccordionItem>
-              )),
+                    </AccordionTrigger>
+                    <AccordionContent className="text-sm leading-relaxed text-foreground">
+                      {detail.bullets?.length ? (
+                        <ul className="list-disc space-y-1 pl-6">
+                          {detail.bullets.map((bullet) => (
+                            <li key={bullet}>{bullet}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <div className="rounded-md border border-dashed border-muted-foreground/40 bg-muted/20 px-3 py-2 text-muted-foreground">
+                          Follow the general document quality rules above.
+                        </div>
+                      )}
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              }),
             )}
           </Accordion>
         </CardContent>

@@ -1,5 +1,5 @@
-import { Header } from "@/components/header"
-import { DocumentAdvisory } from "@/components/document-advisory"
+import { DocumentAdvisory } from "@/components/document-advisory";
+import { Header } from "@/components/header";
 
 export default function HomePage() {
   return (
@@ -9,5 +9,5 @@ export default function HomePage() {
         <DocumentAdvisory />
       </main>
     </div>
-  )
+  );
 }

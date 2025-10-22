@@ -1,7 +1,14 @@
 // src/config/wizard-config.ts
 import type { WizardConfig, WizardStep } from "@/config/wizard-types";
 
-export const STEPS_IN_ORDER = ["purpose", "ageGroup", "category", "enrolmentType", "availableDocuments", "updateDocuments"] as const;
+export const STEPS_IN_ORDER = [
+  "purpose",
+  "ageGroup",
+  "category",
+  "enrolmentType",
+  "availableDocuments",
+  "updateDocuments",
+] as const;
 export type WizardStepOrder = typeof STEPS_IN_ORDER;
 
 /* -----------------------------
@@ -61,7 +68,9 @@ export const wizardConfig: WizardConfig = {
         if (data.purpose === "update") return "updateDocuments";
         // New enrolment:
         // for 0–5 → choose enrolment type; for 5–18 / 18+ → choose available documents
-        return data.ageGroup === "upto5" ? "enrolmentType" : "availableDocuments";
+        return data.ageGroup === "upto5"
+          ? "enrolmentType"
+          : "availableDocuments";
       },
     },
 
@@ -100,28 +109,34 @@ export const wizardConfig: WizardConfig = {
         },
         {
           value: "voter",
-          label: "Voter Identity Card / e-Voter Identity Card whose details are displayed online on the website of the Election Commission of India or the Chief Electoral Officer concerned",
+          label:
+            "Voter Identity Card / e-Voter Identity Card whose details are displayed online on the website of the Election Commission of India or the Chief Electoral Officer concerned",
         },
         { value: "dl", label: "Driving licence" },
         {
           value: "serviceId",
-          label: "Service Photo Identity Card issued by Central Government/ State Government/ PSU/ regulatory body / statutory body",
+          label:
+            "Service Photo Identity Card issued by Central Government/ State Government/ PSU/ regulatory body / statutory body",
         },
         {
           value: "pensionId",
-          label: "Pensioner Photo Identity Card / Freedom Fighter Photo Identity Card / Pension Payment Order issued by Central Government/ State Government/ PSU / regulatory body / statutory body",
+          label:
+            "Pensioner Photo Identity Card / Freedom Fighter Photo Identity Card / Pension Payment Order issued by Central Government/ State Government/ PSU / regulatory body / statutory body",
         },
         {
           value: "healthScheme",
-          label: "CGHS/ ECHS/ ESIC/ Medi-Claim Card issued by Central Government/ State Government/ PSU",
+          label:
+            "CGHS/ ECHS/ ESIC/ Medi-Claim Card issued by Central Government/ State Government/ PSU",
         },
         {
           value: "disabilityId",
-          label: "Disability Identity Card / Certificate of Disability issued under Rights of Persons with Disabilities Rules, 2017",
+          label:
+            "Disability Identity Card / Certificate of Disability issued under Rights of Persons with Disabilities Rules, 2017",
         },
         {
           value: "mgnregaDomicile",
-          label: "MGNREGA/NREGS Job Card and Domicile Certificate issued by State Government",
+          label:
+            "MGNREGA/NREGS Job Card and Domicile Certificate issued by State Government",
         },
         {
           value: "domicileCertificate",
@@ -129,35 +144,43 @@ export const wizardConfig: WizardConfig = {
         },
         {
           value: "casteCertificate",
-          label: "Scheduled Tribe (ST)/ Scheduled Caste (SC)/ Other Backward Caste (OBC) Certificate issued by Central Government/ State Government",
+          label:
+            "Scheduled Tribe (ST)/ Scheduled Caste (SC)/ Other Backward Caste (OBC) Certificate issued by Central Government/ State Government",
         },
         {
           value: "marksheet",
-          label: "Mark-sheet/Certificate issued by recognised Board of Education or university or deemed university or higher educational institution established by a Central or State Act",
+          label:
+            "Mark-sheet/Certificate issued by recognised Board of Education or university or deemed university or higher educational institution established by a Central or State Act",
         },
         {
           value: "transgenderId",
-          label: "Third gender / Transgender Identity Card / Certificate issued under the Transgender Persons (Protection of Rights) Act, 2019 and rules made thereunder",
+          label:
+            "Third gender / Transgender Identity Card / Certificate issued under the Transgender Persons (Protection of Rights) Act, 2019 and rules made thereunder",
         },
         {
           value: "uidaiCert_MPMLA",
-          label: "Certificate issued on UIDAI Standard Certificate format by MP/ MLA/ MLC/ Municipal Councillor",
+          label:
+            "Certificate issued on UIDAI Standard Certificate format by MP/ MLA/ MLC/ Municipal Councillor",
         },
         {
           value: "uidaiCert_GazA_EPFO",
-          label: "Certificate issued on UIDAI Standard Certificate format by Gazetted Officer Group 'A'/Employees Provident Fund Organisation (EPFO) Officer",
+          label:
+            "Certificate issued on UIDAI Standard Certificate format by Gazetted Officer Group 'A'/Employees Provident Fund Organisation (EPFO) Officer",
         },
         {
           value: "uidaiCert_Tehsildar_GazB",
-          label: "Certificate issued on UIDAI Standard Certificate format by Tehsildar/ Gazetted Officer Group 'B'",
+          label:
+            "Certificate issued on UIDAI Standard Certificate format by Tehsildar/ Gazetted Officer Group 'B'",
         },
         {
           value: "uidaiCert_NACO_Health",
-          label: "Certificate issued on UIDAI Standard Certificate format by Gazetted Officer at National AIDS Control Organisation (NACO) / State Health Department / Project Director of the State AIDS Control Society or his nominee",
+          label:
+            "Certificate issued on UIDAI Standard Certificate format by Gazetted Officer at National AIDS Control Organisation (NACO) / State Health Department / Project Director of the State AIDS Control Society or his nominee",
         },
         {
           value: "uidaiCert_EdInstitution",
-          label: "Certificate issued on UIDAI Standard Certificate format by recognised educational institution (signed by Head of Institute; only for the institute students concerned)",
+          label:
+            "Certificate issued on UIDAI Standard Certificate format by recognised educational institution (signed by Head of Institute; only for the institute students concerned)",
         },
         {
           value: "uidaiCert_VillageAuth",
@@ -166,16 +189,19 @@ export const wizardConfig: WizardConfig = {
         },
         {
           value: "electricityBill",
-          label: "Electricity bill (pre-paid/post-paid bill, not older than 3 months)",
+          label:
+            "Electricity bill (pre-paid/post-paid bill, not older than 3 months)",
         },
         { value: "waterBill", label: "Water bill (not older than 3 months)" },
         {
           value: "telecomBill",
-          label: "Telephone landline bill/ post-paid mobile bill/ broadband bill (not older than 3 months)",
+          label:
+            "Telephone landline bill/ post-paid mobile bill/ broadband bill (not older than 3 months)",
         },
         {
           value: "propertyDocs",
-          label: "Valid sale agreement/ gift deed registered with the Registrar Office, or registered or unregistered rent, lease agreement or leave and licence agreement",
+          label:
+            "Valid sale agreement/ gift deed registered with the Registrar Office, or registered or unregistered rent, lease agreement or leave and licence agreement",
         },
         {
           value: "gasBill",
@@ -183,19 +209,23 @@ export const wizardConfig: WizardConfig = {
         },
         {
           value: "allotmentLetter",
-          label: "Allotment letter of accommodation issued by Central Government/ State Government/ PSU / regulatory body / statutory body (not older than 1 year)",
+          label:
+            "Allotment letter of accommodation issued by Central Government/ State Government/ PSU / regulatory body / statutory body (not older than 1 year)",
         },
         {
           value: "insurancePolicy",
-          label: "Life or medical insurance policy (valid up to 1 year from the date of issue of the Policy)",
+          label:
+            "Life or medical insurance policy (valid up to 1 year from the date of issue of the Policy)",
         },
         {
           value: "birthCert",
-          label: "Birth certificate issued under the Registration of Births and Deaths Act, 1969 and the rules made thereunder",
+          label:
+            "Birth certificate issued under the Registration of Births and Deaths Act, 1969 and the rules made thereunder",
         },
         {
           value: "prisonerInduction",
-          label: "Prisoner Induction Document (PID) issued by Prison Officer with signature and seal",
+          label:
+            "Prisoner Induction Document (PID) issued by Prison Officer with signature and seal",
         },
         {
           value: "legalGuardianship",
@@ -205,7 +235,8 @@ export const wizardConfig: WizardConfig = {
         // Foreign/OCI/Nepal/Bhutan/LTV
         {
           value: "ociPassport",
-          label: "For OCI cardholders - Valid foreign passport (along with OCI card)",
+          label:
+            "For OCI cardholders - Valid foreign passport (along with OCI card)",
         },
         {
           value: "nepalBhutanPassport",
@@ -213,7 +244,8 @@ export const wizardConfig: WizardConfig = {
         },
         {
           value: "nepalBhutanCitizenship",
-          label: "For nationals of Nepal and Bhutan – Valid Nepalese/ Bhutanese Citizenship Certificate (acceptable as proof of date of birth also)",
+          label:
+            "For nationals of Nepal and Bhutan – Valid Nepalese/ Bhutanese Citizenship Certificate (acceptable as proof of date of birth also)",
         },
         {
           value: "nepalBhutanVoterOrLimitedID",
@@ -222,15 +254,18 @@ export const wizardConfig: WizardConfig = {
         },
         {
           value: "ltv",
-          label: "For Long Term Visa holders - Valid Long Term Visa (LTV), issued to minority communities of Afghanistan, Bangladesh and Pakistan (Hindus, Sikhs, Buddhists, Jains, Parsis and Christians)",
+          label:
+            "For Long Term Visa holders - Valid Long Term Visa (LTV), issued to minority communities of Afghanistan, Bangladesh and Pakistan (Hindus, Sikhs, Buddhists, Jains, Parsis and Christians)",
         },
         {
           value: "foreignPassportVisa",
-          label: "For other foreign nationals - Valid foreign passport (along with valid visa)",
+          label:
+            "For other foreign nationals - Valid foreign passport (along with valid visa)",
         },
         {
           value: "frroPermit",
-          label: "Valid Registration Certificate or Residential permit issued by FRRO/FRO to the foreign national (except OCI cardholders, LTV document holders and Nepal/Bhutan nationals)",
+          label:
+            "Valid Registration Certificate or Residential permit issued by FRRO/FRO to the foreign national (except OCI cardholders, LTV document holders and Nepal/Bhutan nationals)",
         },
         // Generic buckets (kept last for flexibility)
         { value: "poi", label: "Generic PoI" },
@@ -286,22 +321,33 @@ export function computePath(formData: Record<string, string>): string[] {
   return path;
 }
 
-export function getPrevId(formData: Record<string, string>, currentId: string): string | null {
+export function getPrevId(
+  formData: Record<string, string>,
+  currentId: string,
+): string | null {
   const path = computePath(formData);
   const index = path.indexOf(currentId);
   return index > 0 ? path[index - 1] : null;
 }
 
-export function getNextId(formData: Record<string, string>, currentId: string): string | "results" | null {
+export function getNextId(
+  formData: Record<string, string>,
+  currentId: string,
+): string | "results" | null {
   const step = wizardConfig.steps[currentId];
   return step?.next?.(formData) ?? null;
 }
 
-export function resetFollowingSteps(formData: Record<string, string>, anchorId: (typeof STEPS_IN_ORDER)[number]): Record<string, string> {
+export function resetFollowingSteps(
+  formData: Record<string, string>,
+  anchorId: (typeof STEPS_IN_ORDER)[number],
+): Record<string, string> {
   const nextIndex = STEPS_IN_ORDER.indexOf(anchorId);
   if (nextIndex === -1) return formData;
   const keysToKeep = new Set(STEPS_IN_ORDER.slice(0, nextIndex + 1));
-  const cleanedEntries = Object.entries(formData).filter(([key]) => keysToKeep.has(key as (typeof STEPS_IN_ORDER)[number]));
+  const cleanedEntries = Object.entries(formData).filter(([key]) =>
+    keysToKeep.has(key as (typeof STEPS_IN_ORDER)[number]),
+  );
   return Object.fromEntries(cleanedEntries);
 }
 
@@ -348,7 +394,8 @@ export type ListIConfig = {
 export const LIST_I: ListIConfig = {
   hofBased: [
     {
-      document: "Birth certificate issued under the Registration of Births and Deaths Act, 1969 and the rules made thereunder",
+      document:
+        "Birth certificate issued under the Registration of Births and Deaths Act, 1969 and the rules made thereunder",
       por: true,
       pdb: true,
       note: "Mandatory for births on/after 1.10.2023; must clearly mention the child's name and the HoF/legal guardian.",
@@ -362,7 +409,8 @@ export const LIST_I: ListIConfig = {
       docId: "indian-passport",
     },
     {
-      document: "Document to prove legal guardianship issued by the Central/State Government authority or a court under the Guardians and Wards Act, 1890 / National Trust Act, 1999 / Rights of Persons with Disabilities Act, 2016",
+      document:
+        "Document to prove legal guardianship issued by the Central/State Government authority or a court under the Guardians and Wards Act, 1890 / National Trust Act, 1999 / Rights of Persons with Disabilities Act, 2016",
       por: true,
       pdb: false,
       note: "Accepted for establishing Proof of Relationship with the legal guardian. Submit a separate PDB document for the child.",
@@ -389,7 +437,8 @@ export const LIST_I: ListIConfig = {
     },
     {
       category: "Nationals of Nepal and Bhutan",
-      documents: "Passport of Nepal/Bhutan OR valid Nepalese/Bhutanese Citizenship Certificate along with Limited validity Photo Identity Certificate issued by the respective Mission in India",
+      documents:
+        "Passport of Nepal/Bhutan OR valid Nepalese/Bhutanese Citizenship Certificate along with Limited validity Photo Identity Certificate issued by the respective Mission in India",
       poi: true,
       poa: false,
       pdb: true,
@@ -397,7 +446,8 @@ export const LIST_I: ListIConfig = {
     },
     {
       category: "Long Term Visa (LTV) holders",
-      documents: "Valid Long Term Visa issued to minority communities of Afghanistan, Bangladesh and Pakistan (Hindus, Sikhs, Buddhists, Jains, Parsis and Christians)",
+      documents:
+        "Valid Long Term Visa issued to minority communities of Afghanistan, Bangladesh and Pakistan (Hindus, Sikhs, Buddhists, Jains, Parsis and Christians)",
       poi: true,
       poa: false,
       pdb: true,
@@ -426,7 +476,8 @@ export type MatrixEntry = {
 
 export const LIST_II_MATRIX: Record<string, MatrixEntry> = {
   birthCert: {
-    label: "Birth certificate issued under the Registration of Births and Deaths Act, 1969 and the rules made thereunder",
+    label:
+      "Birth certificate issued under the Registration of Births and Deaths Act, 1969 and the rules made thereunder",
     por: true,
     pdb: true,
     docId: "birth-certificate",
@@ -446,14 +497,16 @@ export const LIST_II_MATRIX: Record<string, MatrixEntry> = {
     por: true,
   },
   casteCertificate: {
-    label: "Scheduled Tribe (ST) / Scheduled Caste (SC) / Other Backward Caste (OBC) Certificate issued by Central Government / State Government",
+    label:
+      "Scheduled Tribe (ST) / Scheduled Caste (SC) / Other Backward Caste (OBC) Certificate issued by Central Government / State Government",
     poi: true,
     poa: true,
     por: true,
     docId: "caste-certificate",
   },
   disabilityId: {
-    label: "Disability Identity Card / Certificate of Disability issued under Rights of Persons with Disabilities Rules, 2017",
+    label:
+      "Disability Identity Card / Certificate of Disability issued under Rights of Persons with Disabilities Rules, 2017",
     poi: true,
     poa: true,
   },
@@ -469,14 +522,16 @@ export const LIST_II_MATRIX: Record<string, MatrixEntry> = {
     poa: true,
   },
   transgenderId: {
-    label: "Third gender / Transgender Identity Card / Certificate issued under the Transgender Persons (Protection of Rights) Act, 2019 and rules made thereunder",
+    label:
+      "Third gender / Transgender Identity Card / Certificate issued under the Transgender Persons (Protection of Rights) Act, 2019 and rules made thereunder",
     poi: true,
     poa: true,
     por: true,
     pdb: true,
   },
   ociPassport: {
-    label: "For Overseas Citizen of India (OCI) cardholders - Valid foreign passport (along with OCI card)",
+    label:
+      "For Overseas Citizen of India (OCI) cardholders - Valid foreign passport (along with OCI card)",
     poi: true,
     pdb: true,
     note: "Validity: 10 years. Provide Proof of Address and Proof of Date of Birth documents from List III.",
@@ -488,19 +543,22 @@ export const LIST_II_MATRIX: Record<string, MatrixEntry> = {
     note: "Validity: 10 years. Provide Proof of Address and Proof of Date of Birth documents from List III.",
   },
   nepalBhutanCitizenship: {
-    label: "For nationals of Nepal and Bhutan – Valid Nepalese/ Bhutanese Citizenship Certificate (along with Limited validity Photo Identity Certificate issued by Nepalese Mission/ Royal Bhutanese Mission in India)",
+    label:
+      "For nationals of Nepal and Bhutan – Valid Nepalese/ Bhutanese Citizenship Certificate (along with Limited validity Photo Identity Certificate issued by Nepalese Mission/ Royal Bhutanese Mission in India)",
     poi: true,
     pdb: true,
     note: "Validity: 10 years. Provide Proof of Address and Proof of Date of Birth documents from List III.",
   },
   ltv: {
-    label: "For Long Term Visa holders - Valid Long Term Visa (LTV) document, issued to minority communities of Afghanistan, Bangladesh and Pakistan (Hindus, Sikhs, Buddhists, Jains, Parsis and Christians)",
+    label:
+      "For Long Term Visa holders - Valid Long Term Visa (LTV) document, issued to minority communities of Afghanistan, Bangladesh and Pakistan (Hindus, Sikhs, Buddhists, Jains, Parsis and Christians)",
     poi: true,
     pdb: true,
     note: "Validity: till the validity of the Long Term Visa. Provide Proof of Address and Proof of Date of Birth documents from List III.",
   },
   foreignPassportVisa: {
-    label: "For other foreign nationals - Valid foreign passport (along with valid visa)",
+    label:
+      "For other foreign nationals - Valid foreign passport (along with valid visa)",
     poi: true,
     pdb: true,
     note: "Validity: till the validity of the visa. Provide Proof of Address and Proof of Date of Birth documents from List III.",
@@ -524,7 +582,8 @@ export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
     docId: "ration-card",
   },
   voter: {
-    label: "Voter Identity Card / e-Voter Identity Card whose details are displayed online on the website of the Election Commission of India or the Chief Electoral Officer concerned",
+    label:
+      "Voter Identity Card / e-Voter Identity Card whose details are displayed online on the website of the Election Commission of India or the Chief Electoral Officer concerned",
     poi: true,
     poa: true,
     docId: "voter-id",
@@ -535,62 +594,73 @@ export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
     docId: "driving-licence",
   },
   serviceId: {
-    label: "Service Photo Identity Card issued by Central Government/ State Government/ PSU/ regulatory body / statutory body",
+    label:
+      "Service Photo Identity Card issued by Central Government/ State Government/ PSU/ regulatory body / statutory body",
     poi: true,
     poa: true,
     pdb: true,
     docId: "service-photo-id",
   },
   pensionId: {
-    label: "Pensioner Photo Identity Card / Freedom Fighter Photo Identity Card / Pension Payment Order issued by Central Government/ State Government/ PSU / regulatory body / statutory body",
+    label:
+      "Pensioner Photo Identity Card / Freedom Fighter Photo Identity Card / Pension Payment Order issued by Central Government/ State Government/ PSU / regulatory body / statutory body",
     poi: true,
     poa: true,
     pdb: true,
     docId: "pensioner-photo-id",
   },
   healthScheme: {
-    label: "CGHS/ ECHS/ ESIC/ Medi-Claim Card issued by Central Government/ State Government/ PSU",
+    label:
+      "CGHS/ ECHS/ ESIC/ Medi-Claim Card issued by Central Government/ State Government/ PSU",
     poi: true,
   },
   disabilityId: {
-    label: "Disability Identity Card / Certificate of Disability issued under Rights of Persons with Disabilities Rules, 2017",
+    label:
+      "Disability Identity Card / Certificate of Disability issued under Rights of Persons with Disabilities Rules, 2017",
     poi: true,
     poa: true,
   },
   mgnregaDomicile: {
-    label: "MGNREGA/NREGS Job Card and Domicile Certificate issued by State Government",
+    label:
+      "MGNREGA/NREGS Job Card and Domicile Certificate issued by State Government",
     poi: true,
     poa: true,
   },
   casteCertificate: {
-    label: "Scheduled Tribe (ST)/ Scheduled Caste (SC)/ Other Backward Caste (OBC) Certificate issued by Central Government/ State Government",
+    label:
+      "Scheduled Tribe (ST)/ Scheduled Caste (SC)/ Other Backward Caste (OBC) Certificate issued by Central Government/ State Government",
     poi: true,
     poa: true,
   },
   marksheet: {
-    label: "Mark-sheet/Certificate issued by recognised Board of Education or university or deemed university or higher educational institution established by a Central or State Act",
+    label:
+      "Mark-sheet/Certificate issued by recognised Board of Education or university or deemed university or higher educational institution established by a Central or State Act",
     poi: true,
     pdb: true,
     docId: "marksheet-certificate",
   },
   transgenderId: {
-    label: "Third gender / Transgender Identity Card / Certificate issued under the Transgender Persons (Protection of Rights) Act, 2019 and rules made thereunder",
+    label:
+      "Third gender / Transgender Identity Card / Certificate issued under the Transgender Persons (Protection of Rights) Act, 2019 and rules made thereunder",
     poi: true,
     poa: true,
     pdb: true,
   },
   uidaiCert_MPMLA: {
-    label: "Certificate issued on UIDAI Standard Certificate format by MP/ MLA/ MLC/ Municipal Councillor",
+    label:
+      "Certificate issued on UIDAI Standard Certificate format by MP/ MLA/ MLC/ Municipal Councillor",
     poa: true,
     docId: "std-mpmla",
   },
   uidaiCert_GazA_EPFO: {
-    label: "Certificate issued on UIDAI Standard Certificate format by Gazetted Officer Group 'A'/Employees Provident Fund Organisation (EPFO) Officer",
+    label:
+      "Certificate issued on UIDAI Standard Certificate format by Gazetted Officer Group 'A'/Employees Provident Fund Organisation (EPFO) Officer",
     poa: true,
     docId: "std-gaz-a-epfo",
   },
   uidaiCert_Tehsildar_GazB: {
-    label: "Certificate issued on UIDAI Standard Certificate format by Tehsildar/ Gazetted Officer Group 'B'",
+    label:
+      "Certificate issued on UIDAI Standard Certificate format by Tehsildar/ Gazetted Officer Group 'B'",
     poa: true,
     docId: "std-tehsildar-gaz-b",
   },
@@ -602,7 +672,8 @@ export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
     docId: "std-naco",
   },
   uidaiCert_EdInstitution: {
-    label: "Certificate issued on UIDAI Standard Certificate format by recognised educational institution (signed by the Head of Institute, only for the institute students concerned)",
+    label:
+      "Certificate issued on UIDAI Standard Certificate format by recognised educational institution (signed by the Head of Institute, only for the institute students concerned)",
     poa: true,
     docId: "std-edu-institution",
   },
@@ -612,7 +683,8 @@ export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
     poa: true,
   },
   electricityBill: {
-    label: "Electricity bill (pre-paid/post-paid bill, not older than 3 months)",
+    label:
+      "Electricity bill (pre-paid/post-paid bill, not older than 3 months)",
     poa: true,
     docId: "electricity-bill",
   },
@@ -622,12 +694,14 @@ export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
     docId: "water-bill",
   },
   telecomBill: {
-    label: "Telephone landline bill/ post-paid mobile bill/ broadband bill (not older than 3 months)",
+    label:
+      "Telephone landline bill/ post-paid mobile bill/ broadband bill (not older than 3 months)",
     poa: true,
     docId: "telephone-bill",
   },
   propertyDocs: {
-    label: "Valid sale agreement/ gift deed registered with the Registrar Office, or registered or unregistered rent, lease agreement or leave and licence agreement",
+    label:
+      "Valid sale agreement/ gift deed registered with the Registrar Office, or registered or unregistered rent, lease agreement or leave and licence agreement",
     poa: true,
     docId: "property-agreement",
   },
@@ -637,22 +711,26 @@ export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
     docId: "gas-bill",
   },
   allotmentLetter: {
-    label: "Allotment letter of accommodation issued by Central Government/ State Government/ PSU / regulatory body / statutory body (not older than 1 year)",
+    label:
+      "Allotment letter of accommodation issued by Central Government/ State Government/ PSU / regulatory body / statutory body (not older than 1 year)",
     poa: true,
     docId: "allotment-letter",
   },
   insurancePolicy: {
-    label: "Life or medical insurance policy (valid up to 1 year from the date of issue of the Policy)",
+    label:
+      "Life or medical insurance policy (valid up to 1 year from the date of issue of the Policy)",
     poa: true,
     docId: "insurance-policy",
   },
   birthCert: {
-    label: "Birth certificate issued under the Registration of Births and Deaths Act, 1969 and the rules made thereunder",
+    label:
+      "Birth certificate issued under the Registration of Births and Deaths Act, 1969 and the rules made thereunder",
     pdb: true,
     docId: "birth-certificate",
   },
   prisonerInduction: {
-    label: "Prisoner Induction Document (PID) issued by Prison Officer with signature and seal",
+    label:
+      "Prisoner Induction Document (PID) issued by Prison Officer with signature and seal",
     poi: true,
     poa: true,
   },
@@ -663,7 +741,8 @@ export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
   },
   // Foreign/OCI/Nepal/Bhutan/LTV
   ociPassport: {
-    label: "For Overseas Citizen of India (OCI) cardholders - Valid foreign passport (along with OCI card)",
+    label:
+      "For Overseas Citizen of India (OCI) cardholders - Valid foreign passport (along with OCI card)",
     poi: true,
     pdb: true,
     note: "Validity: 10 years. Provide Proof of Address and Proof of Date of Birth documents from List III.",
@@ -675,7 +754,8 @@ export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
     note: "Validity: 10 years. Provide Proof of Address and Proof of Date of Birth documents from List III.",
   },
   nepalBhutanCitizenship: {
-    label: "For nationals of Nepal and Bhutan – Valid Nepalese/ Bhutanese Citizenship Certificate (acceptable as proof of date of birth also)",
+    label:
+      "For nationals of Nepal and Bhutan – Valid Nepalese/ Bhutanese Citizenship Certificate (acceptable as proof of date of birth also)",
     poi: true,
     pdb: true,
     note: "Submit along with another Nepal/Bhutan-issued document carrying the same address, as specified by UIDAI.",
@@ -688,19 +768,22 @@ export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
     note: "Provide any two documents with matching address details; Proof of Date of Birth must be furnished separately.",
   },
   ltv: {
-    label: "For Long Term Visa holders - Valid Long Term Visa (LTV) document, issued to minority communities of Afghanistan, Bangladesh and Pakistan (Hindus, Sikhs, Buddhists, Jains, Parsis and Christians)",
+    label:
+      "For Long Term Visa holders - Valid Long Term Visa (LTV) document, issued to minority communities of Afghanistan, Bangladesh and Pakistan (Hindus, Sikhs, Buddhists, Jains, Parsis and Christians)",
     poi: true,
     pdb: true,
     note: "Validity: till the validity of the Long Term Visa. Provide Proof of Address and Proof of Date of Birth documents from List III.",
   },
   foreignPassportVisa: {
-    label: "For other foreign nationals - Valid foreign passport (along with valid visa)",
+    label:
+      "For other foreign nationals - Valid foreign passport (along with valid visa)",
     poi: true,
     pdb: true,
     note: "Validity: till the validity of the visa. Provide Proof of Address and Proof of Date of Birth documents from List III.",
   },
   frroPermit: {
-    label: "Valid Registration Certificate or Residential permit issued by FRRO/FRO to the foreign national (except OCI cardholders, LTV document holders and Nepal/Bhutan nationals)",
+    label:
+      "Valid Registration Certificate or Residential permit issued by FRRO/FRO to the foreign national (except OCI cardholders, LTV document holders and Nepal/Bhutan nationals)",
     poa: true,
   },
   // Generic buckets
@@ -727,7 +810,10 @@ type UpdateGroup = {
   note?: UpdateNote;
 };
 
-export const UPDATE_DOCS: Record<"name" | "address" | "dateOfBirth" | "gender", UpdateGroup> = {
+export const UPDATE_DOCS: Record<
+  "name" | "address" | "dateOfBirth" | "gender",
+  UpdateGroup
+> = {
   name: {
     title: "Name Update",
     description: "Acceptable documents for name updates:",
@@ -758,14 +844,19 @@ export const UPDATE_DOCS: Record<"name" | "address" | "dateOfBirth" | "gender", 
         docId: "marriage-certificate",
       },
       {
-        label: "Gazette Notification of name change (with supporting PoI document)",
+        label:
+          "Gazette Notification of name change (with supporting PoI document)",
         docId: "gazette-notification",
       },
     ],
     note: {
       title: "Important Notes",
       tone: "info",
-      bullets: ["Name in Aadhaar will exactly match the supporting document.", "No additional information such as parent/guardian names will be considered.", "For marriage-related name changes, Marriage Certificate is required."],
+      bullets: [
+        "Name in Aadhaar will exactly match the supporting document.",
+        "No additional information such as parent/guardian names will be considered.",
+        "For marriage-related name changes, Marriage Certificate is required.",
+      ],
     },
   },
   address: {
@@ -821,7 +912,11 @@ export const UPDATE_DOCS: Record<"name" | "address" | "dateOfBirth" | "gender", 
     note: {
       title: "Important Notes",
       tone: "info",
-      bullets: ["Document must contain both name and address.", "All utility bills should not be older than 3 months.", "HoF self-declaration can be used for immediate family members."],
+      bullets: [
+        "Document must contain both name and address.",
+        "All utility bills should not be older than 3 months.",
+        "HoF self-declaration can be used for immediate family members.",
+      ],
     },
   },
   dateOfBirth: {
@@ -829,7 +924,8 @@ export const UPDATE_DOCS: Record<"name" | "address" | "dateOfBirth" | "gender", 
     description: "Acceptable documents for Date of Birth updates:",
     documents: [
       {
-        label: "Birth Certificate (mandatory for 0–18 years and those born on/after 1.10.2023)",
+        label:
+          "Birth Certificate (mandatory for 0–18 years and those born on/after 1.10.2023)",
         docId: "birth-certificate",
       },
       { label: "Valid Indian Passport", docId: "indian-passport" },
@@ -853,7 +949,10 @@ export const UPDATE_DOCS: Record<"name" | "address" | "dateOfBirth" | "gender", 
     note: {
       title: "Mandatory Requirements",
       tone: "warn",
-      bullets: ["Birth Certificate is mandatory for all individuals between 0–18 years.", "For Resident Indians and NRIs born on/after 1.10.2023, Birth Certificate is mandatory."],
+      bullets: [
+        "Birth Certificate is mandatory for all individuals between 0–18 years.",
+        "For Resident Indians and NRIs born on/after 1.10.2023, Birth Certificate is mandatory.",
+      ],
     },
   },
   gender: {
@@ -879,7 +978,10 @@ export const UPDATE_DOCS: Record<"name" | "address" | "dateOfBirth" | "gender", 
     note: {
       title: "Important Notes",
       tone: "info",
-      bullets: ["For surgical gender change, Medical Certificate from surgeon is required.", "Transgender Identity Card / Certificate is accepted as valid proof."],
+      bullets: [
+        "For surgical gender change, Medical Certificate from surgeon is required.",
+        "Transgender Identity Card / Certificate is accepted as valid proof.",
+      ],
     },
   },
 };
@@ -917,7 +1019,17 @@ export type ResultBlock =
       }>;
     };
 
-export function computeResults(formData: Record<string, string>): ResultBlock[] {
+const AVAILABLE_DOC_OPTIONS = wizardConfig.steps.availableDocuments.options;
+
+function getOptionLabel(value: string): string {
+  return (
+    AVAILABLE_DOC_OPTIONS.find((opt) => opt.value === value)?.label ?? value
+  );
+}
+
+export function computeResults(
+  formData: Record<string, string>,
+): ResultBlock[] {
   const purpose = formData.purpose;
   const age = formData.ageGroup;
   const enrolType = formData.enrolmentType;
@@ -928,13 +1040,20 @@ export function computeResults(formData: Record<string, string>): ResultBlock[] 
   out.push({
     kind: "heading",
     title: "Step 5: Document Checklist",
-    subtitle: purpose === "update" ? "Documents Required for Updates" : age === "upto5" ? "Child Enrolment (0–5 Years)" : "Documents Required for Enrolment",
+    subtitle:
+      purpose === "update"
+        ? "Documents Required for Updates"
+        : age === "upto5"
+          ? "Child Enrolment (0–5 Years)"
+          : "Documents Required for Enrolment",
   });
 
   // UPDATE FLOW (List IV) — accordion with 4 groups
   if (purpose === "update") {
     const updateSelections = parseMulti(formData.updateDocuments);
-    const groups = updateSelections.map((key) => UPDATE_DOCS[key as keyof typeof UPDATE_DOCS]).filter((group): group is UpdateGroup => Boolean(group));
+    const groups = updateSelections
+      .map((key) => UPDATE_DOCS[key as keyof typeof UPDATE_DOCS])
+      .filter((group): group is UpdateGroup => Boolean(group));
 
     out.push({ kind: "updateAccordion", groups });
 
@@ -954,7 +1073,10 @@ export function computeResults(formData: Record<string, string>): ResultBlock[] 
     out.push({
       kind: "section",
       title: "As per Latest UIDAI Document List",
-      bullets: ["This checklist mirrors the latest official UIDAI lists for enrolment and updates.", "For clarifications or exception cases, contact your nearest Aadhaar center or UIDAI Regional Office."],
+      bullets: [
+        "This checklist mirrors the latest official UIDAI lists for enrolment and updates.",
+        "For clarifications or exception cases, contact your nearest Aadhaar center or UIDAI Regional Office.",
+      ],
     });
 
     return out;
@@ -985,21 +1107,36 @@ export function computeResults(formData: Record<string, string>): ResultBlock[] 
 
   // NEW ENROLMENT: 5–18 years – List II matrix with alphabetical ordering
   if (age === "5to18") {
-    const keys = (selected.length ? selected : Object.keys(LIST_II_MATRIX)).filter((k) => LIST_II_MATRIX[k]);
+    const baseKeys = selected.length
+      ? selected
+      : AVAILABLE_DOC_OPTIONS.map((opt) => opt.value);
+    const uniqueKeys = Array.from(new Set(baseKeys.filter(Boolean)));
 
-    const rows = keys.map((k) => {
+    const rows = uniqueKeys.map((k) => {
       const e = LIST_II_MATRIX[k];
+      if (e) {
+        return {
+          label: e.label,
+          poi: !!e.poi,
+          poa: !!e.poa,
+          por: !!e.por,
+          pdb: !!e.pdb,
+          note: e.note,
+        };
+      }
       return {
-        label: e.label,
-        poi: !!e.poi,
-        poa: !!e.poa,
-        por: !!e.por,
-        pdb: !!e.pdb,
-        note: e.note,
+        label: getOptionLabel(k),
+        poi: false,
+        poa: false,
+        por: false,
+        pdb: false,
+        note: "Not listed under UIDAI Schedule II for 5–18 years.",
       };
     });
 
-    const sortedRows = [...rows].sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+    const sortedRows = [...rows].sort((a, b) =>
+      a.label.localeCompare(b.label, undefined, { sensitivity: "base" }),
+    );
 
     out.push({ kind: "matrix", rows: sortedRows });
 
@@ -1020,21 +1157,36 @@ export function computeResults(formData: Record<string, string>): ResultBlock[] 
   }
 
   // NEW ENROLMENT: 5–18 or 18+ – Matrix view (List III)
-  const keys = (selected.length ? selected : Object.keys(LIST_III_MATRIX)).filter((k) => LIST_III_MATRIX[k]);
+  const baseKeys = selected.length
+    ? selected
+    : AVAILABLE_DOC_OPTIONS.map((opt) => opt.value);
+  const uniqueKeys = Array.from(new Set(baseKeys.filter(Boolean)));
 
-  const rows = keys.map((k) => {
+  const rows = uniqueKeys.map((k) => {
     const e = LIST_III_MATRIX[k];
+    if (e) {
+      return {
+        label: e.label,
+        poi: !!e.poi,
+        poa: !!e.poa,
+        por: !!e.por,
+        pdb: !!e.pdb,
+        note: e.note,
+      };
+    }
     return {
-      label: e.label,
-      poi: !!e.poi,
-      poa: !!e.poa,
-      por: !!e.por,
-      pdb: !!e.pdb,
-      note: e.note,
+      label: getOptionLabel(k),
+      poi: false,
+      poa: false,
+      por: false,
+      pdb: false,
+      note: "Not listed under UIDAI Schedule III for 18+ enrolments.",
     };
   });
 
-  const sortedRows = [...rows].sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+  const sortedRows = [...rows].sort((a, b) =>
+    a.label.localeCompare(b.label, undefined, { sensitivity: "base" }),
+  );
 
   out.push({ kind: "matrix", rows: sortedRows });
   out.push({

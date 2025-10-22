@@ -1,0 +1,16 @@
+{
+  "name": "Aadhaar Sahayak",
+  "short_name": "Aadhaar",
+  "description": "Step-by-step Aadhaar document guide for enrolment and updates.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/AadhaarLogo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
