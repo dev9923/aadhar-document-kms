@@ -148,6 +148,21 @@ const ADDRESS_UPDATE_DOCUMENT_IDS = [
   "gas-bill",
   "uidai-standard",
   "hof-self-declaration",
+  "insurance-policy",
+  "prisoner-induction",
+  "allotment-letter",
+  "std-naco",
+  "dcpo-certificate",
+  "std-edu-institution",
+  "std-village-auth",
+  "transgender-id",
+  "passbook",
+  "caste-certificate",
+  "disability-id",
+  "mgnrega-domicile",
+  "marriage-certificate",
+  "service-photo-id",
+  "pensioner-photo-id",
 ] as const;
 
 export type OnlineSummaryItem =

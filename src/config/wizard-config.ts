@@ -521,6 +521,14 @@ export const LIST_II_MATRIX: Record<string, MatrixEntry> = {
     poi: true,
     poa: true,
   },
+  marriageCertificate: {
+    label:
+      "Marriage Certificate with or without photograph issued by Central Government/ State Government (supporting PoI document of old name and photograph is required if the Marriage Certificate is without photograph)",
+    poi: true,
+    poa: true,
+    por: true,
+    docId: "marriage-certificate",
+  },
   transgenderId: {
     label:
       "Third gender / Transgender Identity Card / Certificate issued under the Transgender Persons (Protection of Rights) Act, 2019 and rules made thereunder",
@@ -619,18 +627,23 @@ export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
       "Disability Identity Card / Certificate of Disability issued under Rights of Persons with Disabilities Rules, 2017",
     poi: true,
     poa: true,
+    docId: "disability-id",
   },
   mgnregaDomicile: {
     label:
       "MGNREGA/NREGS Job Card and Domicile Certificate issued by State Government",
     poi: true,
     poa: true,
+    por: true,
+    docId: "mgnrega-domicile",
   },
   casteCertificate: {
     label:
       "Scheduled Tribe (ST)/ Scheduled Caste (SC)/ Other Backward Caste (OBC) Certificate issued by Central Government/ State Government",
     poi: true,
     poa: true,
+    por: true,
+    docId: "caste-certificate",
   },
   marksheet: {
     label:
@@ -644,7 +657,9 @@ export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
       "Third gender / Transgender Identity Card / Certificate issued under the Transgender Persons (Protection of Rights) Act, 2019 and rules made thereunder",
     poi: true,
     poa: true,
+    por: true,
     pdb: true,
+    docId: "transgender-id",
   },
   uidaiCert_MPMLA: {
     label:
@@ -681,6 +696,7 @@ export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
     label:
       "Certificate issued on UIDAI Standard Certificate format by Village Panchayat Head/ President or Mukhiya/ Gaon Bura/ equivalent authority (for rural areas)/ Village Panchayat Secretary/ Village Revenue Officer or equivalent (for rural areas)",
     poa: true,
+    docId: "std-village-auth",
   },
   electricityBill: {
     label:
@@ -733,6 +749,28 @@ export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
       "Prisoner Induction Document (PID) issued by Prison Officer with signature and seal",
     poi: true,
     poa: true,
+    docId: "prisoner-induction",
+  },
+  dcpoCertificate: {
+    label:
+      "Certificate issued on UIDAI Standard Certificate format by District Child Protection Officer (DCPO) along with order of placement of child in Child Care Institution (CCI) in Form 18 of the Juvenile Justice Model Rules, 2016 (as amended in 2022)",
+    poi: true,
+    poa: true,
+    docId: "dcpo-certificate",
+  },
+  passbook: {
+    label:
+      "Passbook issued by a scheduled commercial bank or a State cooperative bank having Name and Photograph (cross stamped with Bank seal) and signed by bank official/ Post Office Savings Account Passbook (with stamp and signature of issuing official of post office)",
+    poa: true,
+    docId: "passbook",
+  },
+  marriageCertificate: {
+    label:
+      "Marriage Certificate with or without photograph issued by Central Government/ State Government (supporting PoI document of old name and photograph is required if the Marriage Certificate is without photograph)",
+    poi: true,
+    poa: true,
+    por: true,
+    docId: "marriage-certificate",
   },
   legalGuardianship: {
     label:
@@ -771,8 +809,9 @@ export const LIST_III_MATRIX: Record<string, MatrixEntry> = {
     label:
       "For Long Term Visa holders - Valid Long Term Visa (LTV) document, issued to minority communities of Afghanistan, Bangladesh and Pakistan (Hindus, Sikhs, Buddhists, Jains, Parsis and Christians)",
     poi: true,
+    poa: true,
     pdb: true,
-    note: "Validity: till the validity of the Long Term Visa. Provide Proof of Address and Proof of Date of Birth documents from List III.",
+    note: "Validity: till the validity of the Long Term Visa.",
   },
   foreignPassportVisa: {
     label:
@@ -908,6 +947,72 @@ export const UPDATE_DOCS: Record<
         label: "Self-declaration from HoF (for immediate family members)",
         docId: "hof-self-declaration",
       },
+      {
+        label: "Life or medical insurance Policy (valid up to 1 year from the date of issue)",
+        docId: "insurance-policy",
+      },
+      {
+        label: "Prisoner Induction Document (PID) issued by Prison Officer",
+        docId: "prisoner-induction",
+      },
+      {
+        label: "Allotment letter of accommodation (Central/State Govt/PSU, not older than 1 year)",
+        docId: "allotment-letter",
+      },
+      {
+        label: "Certificate by Gazetted Officer at NACO/State Health Dept/Project Director",
+        docId: "std-naco",
+      },
+      {
+        label: "Certificate by DCPO with CCI placement order",
+        docId: "dcpo-certificate",
+      },
+      {
+        label: "Certificate by recognised educational institution",
+        docId: "std-edu-institution",
+      },
+      {
+        label: "Certificate by Village Panchayat Head/President or equivalent",
+        docId: "std-village-auth",
+      },
+      {
+        label: "Third gender / Transgender Identity Card / Certificate",
+        docId: "transgender-id",
+      },
+      {
+        label: "Bank Passbook / Post Office Savings Passbook (with name and photograph)",
+        docId: "passbook",
+      },
+      {
+        label: "SC/ST/OBC Certificate (Central/State Government)",
+        docId: "caste-certificate",
+      },
+      {
+        label: "Disability Identity Card / Certificate",
+        docId: "disability-id",
+      },
+      {
+        label: "MGNREGA/NREGS Job Card and Domicile Certificate",
+        docId: "mgnrega-domicile",
+      },
+      {
+        label: "Marriage Certificate (with or without photograph)",
+        docId: "marriage-certificate",
+      },
+      {
+        label: "Service Photo Identity Card (Central/State Govt/PSU)",
+        docId: "service-photo-id",
+      },
+      {
+        label: "Pensioner / Freedom Fighter Photo Identity Card",
+        docId: "pensioner-photo-id",
+      },
+      {
+        label: "For LTV holders - Valid Long Term Visa",
+      },
+      {
+        label: "For foreign nationals - Valid Registration Certificate or Residential permit (FRRO/FRO)",
+      },
     ],
     note: {
       title: "Important Notes",
@@ -916,6 +1021,7 @@ export const UPDATE_DOCS: Record<
         "Document must contain both name and address.",
         "All utility bills should not be older than 3 months.",
         "HoF self-declaration can be used for immediate family members.",
+        "For OCI/LTV/foreign nationals, additional documents may be required.",
       ],
     },
   },

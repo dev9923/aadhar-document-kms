@@ -359,6 +359,64 @@ export const documentDetails: Record<string, DocumentDetail> = {
       "Provide the hospital or clinic letterhead along with the date of issuance.",
     ],
   },
+  "prisoner-induction": {
+    id: "prisoner-induction",
+    title: "Prisoner Induction Document (PID)",
+    subtitle:
+      "Prisoner Induction Document (PID) issued by Prison Officer with signature and seal",
+    bullets: [
+      "Document must have Name and Address of the resident.",
+      "Must be issued by the Prison Officer with signature and seal.",
+      "Acceptable as Proof of Identity and Proof of Address.",
+    ],
+  },
+  "dcpo-certificate": {
+    id: "dcpo-certificate",
+    title: "DCPO Certificate with CCI Placement Order",
+    subtitle:
+      "Certificate issued on UIDAI Standard Certificate format by District Child Protection Officer (DCPO) along with order of placement of child in Child Care Institution (CCI) in Form 18 of the Juvenile Justice Model Rules, 2016 (as amended in 2022)",
+    bullets: [
+      "Certificate must be in UIDAI-specified format.",
+      "Must include the order of placement of child in CCI in Form 18.",
+      "Applicable for children in Child Care Institutions.",
+      "Certificate must contain Name and Address of the child.",
+    ],
+  },
+  "std-village-auth": {
+    id: "std-village-auth",
+    title: "Standard Certificate by Village Panchayat Authority",
+    subtitle:
+      "Certificate issued on UIDAI Standard Certificate format by Village Panchayat Head/President or Mukhiya/Gaon Bura/equivalent authority (for rural areas)/Village Panchayat Secretary/Village Revenue Officer or equivalent (for rural areas)",
+    bullets: [
+      "Certificate must be in UIDAI-specified format.",
+      "Certificate must contain Name and Address of the resident.",
+      "Certificate must be valid (issue date within permitted window).",
+      "Applicable only for rural areas.",
+    ],
+  },
+  "disability-id": {
+    id: "disability-id",
+    title: "Disability Identity Card / Certificate",
+    subtitle:
+      "Disability Identity Card / Certificate of Disability issued under Rights of Persons with Disabilities Rules, 2017",
+    bullets: [
+      "Document must have Name and Address of the resident.",
+      "Must be issued under Rights of Persons with Disabilities Rules, 2017.",
+      "Acceptable as Proof of Identity and Proof of Address.",
+    ],
+  },
+  "mgnrega-domicile": {
+    id: "mgnrega-domicile",
+    title: "MGNREGA Job Card and Domicile Certificate",
+    subtitle:
+      "MGNREGA/NREGS Job Card and Domicile Certificate issued by State Government",
+    bullets: [
+      "Document must have Name and Address of the resident.",
+      "Both MGNREGA/NREGS Job Card and Domicile Certificate are required.",
+      "Must be issued by State Government.",
+      "Acceptable as Proof of Identity, Proof of Address, and Proof of Relationship.",
+    ],
+  },
 };
 
 export const documentDetailsList = Object.values(documentDetails);
