@@ -1,0 +1,12 @@
+# robots.txt for Aadhaar Sahayak
+# Official web application for Aadhaar enrolment and update assistance
+
+# Allow all bots to crawl the site
+User-agent: *
+Allow: /
+
+# Disallow sensitive or unnecessary paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+

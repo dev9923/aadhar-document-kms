@@ -1,6 +1,8 @@
 {
   "name": "aadhaar-sahayak",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Official web application for Aadhaar enrolment and update assistance with comprehensive document checklists and quality advisories",
+  "author": "DavyJonesCodes",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",

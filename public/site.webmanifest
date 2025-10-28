@@ -1,16 +1,19 @@
 {
   "name": "Aadhaar Sahayak",
-  "short_name": "Aadhaar",
-  "description": "Step-by-step Aadhaar document guide for enrolment and updates.",
+  "short_name": "Aadhaar Helper",
+  "description": "Official web application to help you plan your Aadhaar enrolment or update with step-by-step document checklists, eligibility guides, and quality advisory references. Support for all age groups, document types, and special categories.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "categories": ["government", "utilities", "productivity"],
   "icons": [
     {
       "src": "/AadhaarLogo.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
